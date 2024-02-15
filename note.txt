@@ -24,6 +24,12 @@ open the launch.json, watch "program": "${workspaceFolder}/src/ch02/hello.ts",
 
 - - - - -
 
-cargo new hello_world
+cargo new hello
 cargo run
 cargo test
+
+
+# cargo auto completions
+mkdir -p ~/.local/share/bash-completion/completions
+rustup completions bash       > ~/.local/share/bash-completion/completions/rustup
+rustup completions bash cargo > ~/.local/share/bash-completion/completions/cargo
