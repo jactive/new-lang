@@ -1,0 +1,26 @@
+# Installation
+
+Install Rust, https://rustup.rs 
+ * cargo --version 
+ * rustc --version 
+ * rustdoc --version 
+ * rustfmt main.rs
+
+# cargo cli
+Create a new project (like a maven project) 
+ * cargo new hello 
+ * cargo run 
+ * cargo test
+ * cargo build --release 
+
+*cargo auto completions*
+mkdir -p ~/.local/share/bash-completion/completions
+rustup completions bash       > ~/.local/share/bash-completion/completions/rustup
+rustup completions bash cargo > ~/.local/share/bash-completion/completions/cargo
+
+# docs
+Doc, https://www.rust-lang.org/learn 
+ * rustup doc –std 
+
+ 
+

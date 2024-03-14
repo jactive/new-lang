@@ -8,7 +8,7 @@ async fn hello() -> impl Responder {
         .body(
             r#"
                 <title>GCD Calculator</title>
-                <from action="/gcd" method="post">
+                <form action="/gcd" method="post">
                     <input type="text" name="n" />
                     <input type="text" name="m" />
                     <button type="submit">Compute GCD</button>
