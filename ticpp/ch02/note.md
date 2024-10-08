@@ -54,4 +54,22 @@ using namespace std;
 
 In C, text inside double quotes (like "hello") is called a "string." However, the Standard C++ library has a powerful class called string for manipulating text. In C++, a precise term for "hello" is called **character array**.
 
+cout << "in octal: " << oct << 15 << endl;
+cout << "in hex: " << hex << 15 << endl;
+cout << "ascii char: " << char(48) << endl;
+// cout: console out
+// cin: console in
+// endl: end line, aka CRLF
 
+Character array concatenation.  If two quoted character arrays are adjacent, and no punctuation is between them, the compiler will paste the character arrays together into a single character array, e.g.
+  cout << "This is far too long to put on a "
+    "single line but it can be broken up with "
+    "no ill effects\nas long as there is no "
+    "punctuation separating adjacent character "
+    "arrays." << endl;
+
+string s1, s2; // empty strings are defined
+string s3 = "Hello, world."; // initialized
+string s4("I feel"); // also initialized
+
+when including <fstream>, <iostream> is not automatically included.
