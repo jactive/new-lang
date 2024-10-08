@@ -73,3 +73,15 @@ string s3 = "Hello, world."; // initialized
 string s4("I feel"); // also initialized
 
 when including <fstream>, <iostream> is not automatically included.
+
+```
+  string word;
+  ifstream in("./10.meet_vector.cpp");
+  while (in >> word) { ... }
+```
+The expression **while(in >> word)** is what gets the input one word at a time by delimiting words by whitespace.  When **in >> words** evaluates to false it means the end of the file has been reached. Note `word << in` does not work.
+```
+  cout << word;
+  in >> word; // the operand stream starts, followed by operator >> or <<
+```
+
