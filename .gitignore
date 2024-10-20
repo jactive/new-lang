@@ -4,3 +4,4 @@ node_modules
 dist
 note.txt~
 *.swp
+a.out
