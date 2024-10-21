@@ -1,0 +1,71 @@
+<html>
+<body>
+<center>
+<h2>Characters in C</h2>
+</center>
+
+<h4>char</h4>
+In C, char values are stored in 1 byte, and are encoded as numbers using
+the ASCII encoding.  
+<p>
+The man page for ascii lists all the encodings:
+<pre>
+% man ascii
+</pre>
+<p>
+You should never use the ASCII numeric value 
+directly, but you should know that the characters 'A' to 'Z' are 
+contiguous, 'a' to 'z' are contiguous, and '0' to '9' are contigouous.
+Using the relationships between the upper case alphabetic, the lower case 
+alphabetic, and the numeric characters I can write expressions like this:
+<pre>
+  char ch;
+
+  'a' + 2          // evaluates to the character value 'c' (becuase 'a' is
+	                 // (encoded as a number we can add 2 to it to get 'c')
+  'C' &gt; 'A'     // evaluates to true, which is a non-zero value in C
+                   // (0 is false)
+
+  for(ch = 'a'; ch &lt; 'z'; ch++) { ... 
+
+  ch = getchar();  // read in a char value from stdin
+
+  printf("ch is %c\n", ch);
+</pre>
+<h4>C library functions for characters</h4>
+The Standard C library has functions you can use for manipulating and
+testing character values:
+<pre>
+#include &lt;ctype.h&gt;
+
+
+int islower(ch);       
+int isupper(ch);       // these functions return a non-zero value if the
+int isalpha(ch);       // test is TRUE, otherwise they return 0 (FALSE) 
+int isdigit(ch);
+int isalnum(ch);       
+int ispunct(ch);
+int isspace(ch);       
+char tolower(ch);
+char toupper(ch);
+</pre>
+
+Here are some examples of what they do/return:
+<pre>
+char c = toupper('a');  // returns the character value 'A'
+
+         islower('Z')   // returns 0 (FALSE) 
+
+	 isspace(ch)    // returns non-zero (TRUE) if ch is a whitespace character
+	                // ' ', '\t', '\n', '\r', '\f', or '\v' 
+	 		
+</pre>
+<li> To get on-line documentation of C functions, use Unix's man utility:
+<pre>
+	% man isspace 
+</pre>
+<a href="man.html">Here</a> 
+is more information about using man.
+<p>
+</body>
+</html>

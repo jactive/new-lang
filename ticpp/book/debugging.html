@@ -1,0 +1,76 @@
+<html>
+<title>Debugging</title>
+<body bgcolor="#ffffff">
+<center>
+</center>
+
+<h2>Debugging Tools</h2>
+
+Debugging tools allow you to see what is going on inside your program
+as it runs and let you see what your program was doing when it
+crashed.  Learning to use a debugger can save you hours/days/months of 
+time over trying to find and fix bugs using only output statements. 
+<p>
+<h4>General debuggers</h4> 
+General debuggers, like gdb, allow you to examine a program's
+state (variables, stack frame contents, etc.), allow you to set breakpoints
+to stop the program at a certain points to examine its state, allow you
+to step through the execution one instruction at a time, and allow
+you to alter the value of your program's state  (change a variable's 
+value, call a function) as it runs.  
+gdb and ddd are debuggers you can use for C or C++ programs.
+ddd is an easy-to-use GUI wrapper around an inferior debugger (gdb 
+for GNU compiled C or C++ code).  
+
+<p>
+<a href="howto_gdb.php">GDB Guide</a>: 
+<br> "how to use gdb" information, including information on compiling C (and
+C++) programs for use with gdb, running gdb, keyboard shortcuts, commonly used 
+gdb commands, gdb and make, example gdb sessions, tips on setting breakpoints
+in C++ code, and links to GDB references.
+ <p>
+Some sample programs that you can copy and try out with gdb are available here: 
+<font color="blue"><tt>/home/newhall/public/gdb_examples/</tt></font>
+
+<p><a href="debuggingtips_Java.html">Debugging tools for Java</a>
+<p>
+
+<h4>Memory debuggers</h4> 
+Memory debuggers find errors in how your program accesses memory.
+valgrid is a tool for finding heap memory access errors in C and C++ 
+programs (memory leaks, reading uninitialized memory, 
+accessing unallocated memory, 
+array out-of-bounds errors, ...).  
+These are often the types
+of program bugs that are very difficult to find, as the cause of the
+bug (ex. an out-of-bounds array write), may trigger your program crashing
+in a seemingly unrelated part (like reading the value of a different
+variable).  Valgrind can quickly point you to the
+source and type of these memory access bugs in your program code.
+It is pretty easy to learn to use, and the effort you put in to learning
+how to use it will be more than made up for by the debugging time you save 
+by using it.  
+<p>
+<a href="purify.html">Valgrind Guide</a>: information on how to use valgrind
+with a sample session and links to valgrind references.
+<p>
+Some sample programs that you can copy and try out with 
+valgrind are available here: 
+<font color="blue"><tt>/home/newhall/public/purify_valgrind_examples/</tt>
+</font>
+<p>
+<h4>Performance debuggers</h4> 
+There are also performance debugging tools. Typically, they 
+collect performance data as your program runs and the data are used 
+to identify inefficiencies in your program.  gprof is one example 
+of a performance tool. 
+<p>
+
+
+<br> &nbsp;
+<br> &nbsp;
+<br> &nbsp;
+<br> &nbsp;
+<br> &nbsp;
+</body>
+</html>

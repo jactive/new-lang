@@ -1,0 +1,60 @@
+<html>
+	<body>
+		<pre>
+Commonly used gdb commands
+--------------------------
+gdb also understands abreviations of commands, so you can just type up to 
+the unique part of a command name ("cont" for "continue", or "p" for "print")
+
+help               # List classes of all gdb commands
+help &lt;topic&gt;       # Shows help available for topic or command
+
+where (or bt)      # Shows stack: sequence of function calls executed so far
+                   # (good for pinpointing location of a program crash)
+
+frame              # Shows all stack frames
+frame &lt;frame-num&gt;  # Sets current stack frame to &lt;frame-num&gt;
+                   # (useful for checking parameter and argument values)
+
+run                # Starts program execution from the beginning
+
+break &lt;line&gt;       # Sets breakpoint at line number &lt;line&gt;
+break &lt;func-name&gt;  # Sets breakpoint at beginning of named function 
+continue           # Continues execution from breakpoint
+
+condition &lt;bp-num&gt; &lt;exp&gt;   # Set breakpoint &lt;bp-num&gt; to 
+                           # break only when &lt;exp&gt; is true
+
+info break            # Shows current breakpoints
+disable [breakpoints] # [bnums ...]  Disable one or more breakpoints
+enable [breakpoints]  # [bnums ...]   Enable one or more breakpoints 
+clear &lt;line&gt;          # Clears breakpoint at line number &lt;line&gt;
+delete &lt;bp-num&gt;       # Deletes breakpoint number &lt;bp-num&gt;
+delete                # Deletes all breakpoints
+
+step (or s)           # Executes next line of program (steping into functions)
+step &lt;count&gt;          # Executes next &lt;count&gt; lines of program
+next (or n)           # Like step, but treats a function call as a single instr
+until &lt;line&gt;          # Executes program until line number &lt;line&gt;
+
+print &lt;exp&gt; (or inspect &lt;exp&gt;    # Displays the value of expression &lt;exp&gt;
+display &lt;exp&gt;                    # Automatic display of &lt;exp&gt; each time a breakpt hit
+whatis &lt;exp&gt;                     # Shows data type of expression &lt;exp&gt;
+info locals                      # Shows local variables in current stack frame
+set variable &lt;variable&gt; = &lt;exp&gt;  # Sets variable &lt;variable&gt; to expression &lt;exp&gt;
+
+list                  # Lists next few lines of program
+list &lt;line&gt;           # Lists lines around line number &lt;line&gt; of program
+list &lt;start&gt; &lt;end&gt;    # Lists line numbers &lt;start&gt; through &lt;end&gt;
+list &lt;func-name&gt;      # Lists lines at beginning of function &lt;func-name&gt;
+
+help status           # lists a bunch of info X commands, including:
+info frame            # list information about the current stack frame
+info locals           # list local variable values of current stack frame
+info args             # list argument values of current stack frame
+info registers        # list register values
+
+quit                  # quits gdb
+</pre>
+	</body>
+</html>

@@ -1,0 +1,76 @@
+<html>
+<body>
+<h3>Basic compiling and running C programs on our system</h3>
+<ol>
+<li> Create a file containing your C source code using the vim 
+(or emacs) editor (% is the unix prompt in these examples):
+<pre>
+% vim add.c                 
+</pre>
+If you don't know how to use either editor, first run vimtutor
+to learn vim:
+<pre>
+% vimtutor
+</pre>
+<p>
+<li>gcc is the C compiler that will compile your C source code
+into an executable file you can run.
+<br>To compile the add.c program:
+<pre>
+% gcc add.c           
+</pre>
+<br>It is a good idea to compile with -g flag to include debugging
+information in the executable:
+<pre>
+% gcc -g add.c           
+</pre>
+<p>
+<li> If there were no compilation errors, then gcc creates an executable
+file named a.out that you can run:     
+<pre>
+# list contents of directory to see that gcc created a.out file
+% ls			
+	a.out*   add.c
+
+# run a.out:
+% ./a.out	  
+</pre>
+</ol>
+If you make changes to add.c and re-compile it, I'd suggest first
+removing the a.out from the previous compile (this way if the
+compilation fails you won't mistakenly run the old a.out and wonder
+why your changes are not showing up):
+<pre>
+% rm a.out
+% gcc -g add.c
+</pre>
+<hr>
+Some other common gcc options:
+<p>-Wall to turn on all compiler warnings (this is usually a good idea):
+<pre>
+% gcc -g -Wall add.c           
+</pre>
+<br>-o filename to specify the name of the executable to 
+be something other than the default a.out:
+<pre>
+% gcc -g -Wall -o add add.c           
+# to run:
+% ./add
+</pre>
+<br>-lm to link in the math library (it contains functions like
+sqrt, cos, sin, etc):
+<pre>
+% gcc -g -Wall -o add add.c -lm          
+</pre>
+<hr>
+<h4>make</h4>
+
+Eventually, you will want to put the compilation commands in a makefile and
+then just run the command <tt>make</tt> to compile your program.  Here
+is some more information on make and makefiles:
+
+<a href="howto_makefiles.html">
+	make and makefiles</a>
+
+</body>
+</html>

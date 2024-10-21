@@ -1,0 +1,235 @@
+<html>
+<title>Debugging</title>
+<body bgcolor="#ffffff">
+<center>
+<h2>Compiling and Debugging Tips for C</h2>
+</center>
+<hr>
+<b>INDEX</b>
+<p>
+<a href="debuggingtips_C.html#compiling">Compiling C Programs</a> gcc, using make
+<br>
+<a href="debuggingtips_C.html#link">Handling Linking Errors</a> 
+<br>
+<a href="debuggingtips_C.html#debugging">Debugging C</a> <code> gdb and valgrind</code>
+<hr>
+<a name=compiling>
+<h3>COMPILING</h3>
+Use the GNU C compiler, <code>gcc</code>, to compile your C code.
+Compile your code with warnings turned on (<code>-Wall</code> turns on
+all warnings).  And don't ignore warnings as you compile your code; warnings
+usually indicate a lurking problem that can lead to real problems later.
+As you develop your code, you should compile with <code>-g</code> too; this 
+will add information to the executable file that is used by gdb and valgrind.
+It is a good idea to create a Makefile and use <b>make</b> to build your project code.  
+<a href="howto_makefiles.html">Here</a> is some more information 
+about make.
+<p>
+For more information about gcc make see the 
+<a href="http://www.gnu.org/manual/">GNU manuals</a> or run
+info (the man pages for gcc and make are not very complete).
+<p>
+If you get undefined errors during compilation, it means either that you
+have not defined a variable or function, or that the type is undefined 
+(a missing header file), or that the function target cannot be found
+(a linking error).
+<p>
+<h4>Header Files</h4>
+Most header files that you include using this format:
+<pre>
+#include &lt;foo.h&gt;
+#include &lt;sys/blah.h&gt;
+</pre>
+are located in /usr/include/.   You can open these files to look for
+type defintions and function prototypes (/usr/include/foo.h  and 
+/usr/include/blah.h).  Include files often include other files, so
+you may have to traverse multiple includes to find the definition you
+are looking for.  Another way to find these, are to compile your pogram
+with -E, to just run the preprocessor (all the #includes, #defines, etc
+are expanded):
+<pre>
+gcc -E foo.c &gt; output
+</pre>
+redirect the result to an ouput file, since it will be huge, then you can
+open output and see where definitions are coming from.
+<p>
+When you define your own header files, you should include them using this
+format:
+<pre>
+#include "myheaderfile.h"
+</pre>
+You may need to tell gcc where these are located using the -I option to 
+specify the include path (see the example in the linking section below).
+<hr>
+<a name=link>
+<h3>LINKING</h3>
+<p>
+A common link-time error is forgetting to link library code into your 
+program that uses it.  If the compiler fails at link time with a  
+list of undefined symbols in your program, it is due to your not
+linking in one or more .o files or library .a or .so files into
+your program (if you get an undefined reference error when a file
+is being compiled from .C to .o, then this means you forgot to include
+a header file).
+For example, if you are calling the <code>sqrt</code> function from the math
+library, you need to include the math.h header file in your .C file
+and you need to explicitly link the math library into your executable:
+<pre>
+        gcc -g -Wall -o myprog myprog.o -lm
+                                        ^^^
+</pre>
+Most libraries are in /usr/lib/.   If not, you may need to include the -L
+option to gcc to tell it where to find your library.  If you list files in
+/usr/lib/, you will see that they have names like libname.so or libname.a.
+To link in these libraries, use -lname.   For example, the math library is
+in the file /usr/lib/libm.so (and the static version of the library is in
+/usr/lib/libm.a).  To link the math library into your program you include
+-lm on the gcc command line (as in the example above).
+<p>
+For standard C and C++ library functions, look at the man page for information
+on how to link in the library code as part of the gcc command line.
+For other library code, including libraries you have written, you need to
+tell the linker where the library code is located.  To do this use the 
+<code>-L</code> command line option followed by the path(s) to library 
+code.  For example, if I have two libraries in 
+<code>/home/newhall/mylibs/</code>, one of which is a shared object file named 
+<code>libmymath.so</code> and the other an archive file named 
+<code>libsimple.a</code>,
+then I'd add the following to my makefile to link in my two libraries plus the
+standard math library (this is only part of the makefile):
+<pre>
+# add the path to my library code; -L tells the linker where to find it
+LFLAGS += -L /home/newhall/mylibs
+# list of libraries to link into executable; -l tells the linker which 
+# library to link in to the executable
+LIBS = -lmymath	-lsimple -lm
+OBJS = myprog.o
+
+# path to any header files not in /usr/include or the current directory 
+INCLUDES += -I/home/newhall/include -I../include
+
+default: myprog
+
+myprog:
+	$(CC) $(CFLAGS) $(LFLAGS) -o myprog $(OBJS) $(LIBS)  
+
+${OBJS}: %.o :  %.c
+	${CC} -c ${CFLAGS} ${LFLAGS} ${INCLUDES} ${@:.o=.c}
+</pre>
+<p>
+To list symbols in .so .a .o or an executable files, you can 
+use <code>nm</code> or <code>objdump -t</code> to list the contents 
+of the symbol table. The output will include all symbols (e.g. functions,
+global variables), and will list information about them including if they
+are defined or not (defined in a .o means the code for this function or
+the declaration of this global variable is in this file, undefined means
+it is in some other .o, .a, or .so file). 
+
+<p>
+Executable files that are built using static linking contain
+all the library code needed to run.  Executable files that are built
+using dynamic linking do not contain library code from .so files.
+Instead, library code from .so files is dynamically loaded into the
+address space of the process at runtime.  To list the shared object
+dependencies of an executable file (or of a .so file) use <code>ldd</code>.
+ldd will list the name of each shared object file and the full path to
+its location.  If a program fails at runtime with a linking error, it is
+due to the runtime linker not being able to find one or more of 
+the .so files needed to run the executable.
+<pre>
+	% ldd a.out 
+	linux-gate.so.1 =>  (0xffffe000) 
+	libX11.so.6 => /usr/lib/libX11.so.6 (0xb7e3c000) 
+	libm.so.6 => /lib/tls/libm.so.6 (0xb7e05000) 
+	libc.so.6 => /lib/tls/libc.so.6 (0xb7cd3000) 
+	libXau.so.6 => /usr/lib/libXau.so.6 (0xb7cd0000) 
+	libXdmcp.so.6 => /usr/lib/libXdmcp.so.6 (0xb7ccb000) 
+	libdl.so.2 => /lib/tls/libdl.so.2 (0xb7cc7000) 
+	/lib/ld-linux.so.2 (0xb7f2b000)
+</pre>
+If you get runtime errors like the following:
+<pre>
+$ ./a.out
+a.out: error while loading shared libraries: libmylib.so: cannot open shared object file: No such file or directory
+</pre>
+this means that the runtime linker cannot find a .so file (libmylib.so in
+this example).  This most often occurs when you link in shared object files 
+that are not in /usr/lib, but can also occur when the a.out file was built
+using libraries in /usr/lib that are no longer present when you try to run
+it (often times this can be fixed by re-compiling, but may require re-installing
+the missing libraries).  To fix the problem when the shared object file is
+a directory different from /usr/lib, you need to set your LD_LIBRARY_PATH 
+environment variable to include a path to .so files need at runtime.  
+For example, if I put my .so files in a directory named lib in my home 
+directory, I'd set my LD_LIBRARY_PATH enviroment to the following:
+<pre>
+  # if running bash:
+  export LD_LIBRARY_PATH=/home/newhall/lib:$LD_LIBRARY_PATH
+
+  # if running tcsh:
+  setenv LD_LIBRARY_PATH /home/newhall/lib:$LD_LIBRARY_PATH
+</pre>
+
+See <a href="howto_C_libraries.html">Building and Linking Libraries in C (or C++)</a> for more information on building and using your own library code.
+
+<hr> 
+<a name=debugging>
+<h3>DEBUGGING: gdb, ddd, valgrind</h3>
+(NOTE: much of this content is in an expanded form in the
+<a href="https://diveintosystems.org/">Chapter 3 Dive into Systems</a>, 
+a free, online textbook.)
+<p>
+<h3>gdb and ddd</h3>
+
+
+A debugger allows you to see what is going on inside your program
+as it runs and/or let you see what your program was doing when it
+crashed.  gdb and ddd allow you to examine a program's
+state (variables, stack frame contents, etc.), allow you to set breakpoints
+to stop the program at a certain points to examine its state, and allow
+you to alter the value of your program's state  (change a variable's
+value, call a function) as it runs.  Learning to use a debugger can save you
+hours/days of time over trying to debug via printf statements.
+<p>
+<a href="howto_gdb.php">GDB Guide</a>: 
+<br>
+"how to use gdb" information, including information on compiling C 
+programs for use with gdb, running gdb, commonly used commands, 
+example sessions, gdb and make, ddd,  keyboard shortcuts, and links to
+gdb references.
+<p>
+Some sample programs that you can copy and try out with gdb are available here:
+<font color="blue"><tt>/home/newhall/public/gdb_examples/</tt></font>
+
+<p>
+
+<h3>valgrind</h3>
+valgrind is a tool for finding memory access errors in your code 
+(memory leaks, reading uninitialized memory, accessing unallocated memory, 
+array out-of-bounds errors, ...).  In C and C++ programs, memory
+access errors are the most difficult bugs to find and to fix. valgrind can 
+save you days worth of debugging effort by quickly pointing you to the
+source and type of these memory access bugs in your program code.
+valgrind is pretty easy to learn to use, and the effort you put in to learn
+how to use it will be more than made up for by the debugging time you save 
+by using it.  
+<p>
+Some sample programs that you can copy and try out with 
+valgrind are available here:    
+<font color="blue"><tt>/home/newhall/public/purify_valgrind_examples/</tt>
+</font>
+<p>
+<a href="valgrind.php">Valgrind Guide</a>:  "how to use valgrind" 
+information with a sample valgrind session and links to valgrind references.
+
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+<p>&nbsp;
+
+
+
+</body>
+</html>

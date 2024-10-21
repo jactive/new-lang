@@ -3,11 +3,10 @@
 using namespace std;
 
 int main(void) {
-   cout << "press A, B and C or else to exit" << endl;
+   cout << "Enter A or B, or others to exit" << endl;
 
    while (char entered = cin.get()) {
-      cout << "enter " << entered << endl;
-      switch(entered) {
+      switch (entered) {
          case 'a':
          case 'A':
             cout << "apple" << endl;
@@ -20,8 +19,12 @@ int main(void) {
          case 'C':
             cout << "cashew" << endl;
             break;
-         defalut:
-            cout << "kk" << endl;
+         case '\n':
+            // ignore line break
+            break;
+         defalut: // the typo cause dead loop, because of no default
+         // default:
+            cout << "bye - " << entered << endl;
             return 0;
       }
    }

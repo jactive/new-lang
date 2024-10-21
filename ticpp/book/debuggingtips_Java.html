@@ -1,0 +1,169 @@
+<html>
+<HEAD>
+<TITLE>Compiling and Running Java Programs</TITLE>
+</HEAD>
+<body bgcolor="#ffffff">
+<body>
+<center><h2>Compiling, Running and Debugging Java Programs</h2></center>
+<hr>
+<h3>Index</h3>
+<ul>
+<li><A HREF="debuggingtips_Java.html#compiling">Compiling and Running</A>
+<li><A HREF="debuggingtips_Java.html#jar">CLASSPATH environment variable and <tt>.jar</tt> files</A>
+<li><A HREF="debuggingtips_Java.html#debugging">Debugging and JDB</A>
+<li><A HREF="debuggingtips_Java.html#thread">Debugging Threaded Programs</A>
+</ul>
+<font color="red">NOTE:</font> These instructions are for using Sun's 
+distribution of java (SDK) without an IDE.  If you are using some type of 
+Java IDE (like Eclipse) then you should look at its documentation 
+for information on using its editing and debugging features.
+
+<hr>
+<a name=compiling>
+<h3>Compiling Java Source Code</h3>
+Before the Java virtual machine (VM) can run a Java program, the program's 
+Java source code must be compiled into byte-code using the  
+<samp>javac</samp> compiler.  Java byte-code is a platform independent 
+version of machine code; the target machine is the Java VM rather than the 
+underlying architecture.  To compile a Java source code file 
+<samp>Foo.java</samp>, you would do the following:
+<pre>
+	% javac -g Foo.java
+</pre>
+The <samp>-g</samp> command line option is optional, but we recommend
+using it as it makes debugging easier. 
+<p>
+If there are no errors in your source file, the Java compiler will produce 
+one or more <samp>.class</samp> files (one <samp>.class</samp> file for 
+each class defined in the <samp>Foo.java</samp> source file).  For example,
+the results of a successful compile of <samp>Foo.java</samp> will produce
+a byte-code version of the class in a file named <samp>Foo.class</samp>.
+<p>
+Every public class that you write must be in a separate <samp>.java</samp> 
+file where the first part of the file name is identical to the class name.  
+The <samp>.java</samp> file additionally can contain code for protected 
+and private classes. 
+<p>
+We suggest that you get in the habit of using makefiles for compiling
+your Java application code.  More information on makefiles is available
+<a href="javamakefiles.html">here</a>.
+<hr>
+<h3>Running a Java application</h3>
+Once you have successfully compiled your Java source code, you can invoke
+the Java VM to run your application's byte-code:
+<pre>
+    % java &lt<samp>class with main method to run</samp>&gt [&lt<samp>command line args</samp>&gt, ...] 
+</pre>
+For example, to run the <samp>main</samp> method from the <samp>Foo</samp> 
+class:
+<pre>
+    % java Foo
+</pre>
+Any command line arguments (arguments to <samp>Foo</samp>'s 
+<samp>main</samp> method) follow the class name:
+<pre>
+    % java Foo 10 20
+</pre>
+<hr>
+<a name=jar>
+<h3>The CLASSPATH environment variable and JAR files</h3>
+
+When the Java VM runs your program it searches for application 
+<samp>.class</samp> files using the paths listed in your CLASSPATH 
+environment variable.   To run a simple Java application, you do not 
+need to set a CLASSPATH environment variable; the Java VM looks for 
+classes in the current working directory by default.  However, if your 
+program uses classes that are not in the current working directory, then 
+you need to explicitly set your CLASSPATH environment variable to list all 
+the directories containing classes used by this application.
+In addition, if your program uses classes contained in a JAR (Java ARchive)
+file, then the JAR file must be listed in your CLASSPATH.  A JAR file is 
+a single file that contains many <samp>.class</samp> files.
+<p>
+After the first few weeks of class, we will start using the book's JDSL 
+library, and you will need to add this library's JAR file to your CLASSPATH.
+To your .cshrc file, add the following:
+<pre>
+setenv CLASSPATH ./:/home/newhall/public_html/cs35/book_classes/lib/jdsl_general.jar
+</pre>
+Each path is separated by a '<samp>:</samp>'.  In this example, CLASSPATH 
+is set to two directories: the current directory (<samp>./</samp>) and 
+the <samp>dsl_general.jar</samp> file.
+If you have a CLASSPATH environment variable defined, then the VM uses
+the paths listed in the CLASSPATH environment variable rather than searching
+using its default paths.  As a result, if you set this environment variable
+you need to add the current path otherwise the VM will not find classes in
+the current working directory.
+
+<hr>
+
+<a name=debugging>
+<H2>Debugging Java Code</H2>
+
+If your program terminates with a thread dump, and if you are using a just-in-time compiler Java VM (by default, JDK runs as just-in-time compiler VM), then the
+thread dump will likely contain lots of useless information.  To get thread
+dump information in terms of your Java source code, compile with -g and run 
+the Java virtual machine in all-interpreted mode using the 
+<kbd>-Djava.compiler=NONE</kbd> command line argument:
+<pre>
+	java <b>-Djava.compiler=NONE</b> blah
+</pre>
+<p>
+<br>Compile with -g.  This will cause the java compiler to put Java source 
+code line information in .class files:
+<pre>
+	javac <b>-g</b> blah.java
+</pre>
+<p>
+<h4>JDB</h4>
+Use <a href="http://java.sun.com/j2se/1.3/docs/tooldocs/solaris/jdb.html">jdb</a> to set breakpoints, dump thread stacks, and step through the
+execution.  <kbd>jdb</kbd> has a <kbd>dbx</kbd>-like interface rather than 
+a <kdb>gdb</kbd>-like interface.  Running <kbd>jdb</kbd> and typing 
+<kbd>help</kbd> will provide you with information about 
+<kbd>jdb</kbd>'s commands.  Here are some
+commonly used commands:
+<ul>
+<li><tt>help</tt> to list commands for which help information is available 
+<li> <code>jdb &lt;classname&gt</code>: to run JDB
+<li> <code>exit</code>: to exit from JDB
+<li> <code>run &lt;classname&gt</code>: to run your program from within JDB
+<li> <code>run &lt;classname&gt &lt;args&gt</code>: to run your program with command-line arguments
+<li><tt>stop in &lt;class-name&gt;.&lt;method-name&gt;</tt>
+          <td>to set a breakpoint at the entry of the given method
+  <li><tt>stop at &lt;class-name&gt;:&lt;line-number&gt;</tt>
+          <td>to set a breakpoint at the given line
+  <li><tt>clear &lt;class-name&gt;.&lt;method-name&gt;</tt>
+          <td>to remove a breakpoint
+  <li><tt>clear &lt;class-name&gt;:&lt;line-number&gt;</tt>
+          <td>to delete the specified breakpoint
+  <li><td><tt>cont</tt>
+          <td>to continue execution after stopping at a breakpoint
+  <li><td><tt>step</tt>
+          <td>to execute the current statement then stop
+              (if it is a method call, stops inside the called method)
+  <li> <tt>next</tt>
+          <td>to execute the current statement 
+              (if it includes a method call, it executes the called
+	       method; it does not step into the called method)
+  <li><tt>step up</tt>
+          <td>to execute until the current method returns
+
+<li><tt>list</tt> to examine source code (10 lines around the current line) 
+<li><tt>list &lt;line number&gt</tt> to examine source code at given line 
+<li><tt>list &lt;method name&gt</tt> to examine source code at the start
+of the given method 
+<li><tt>print &lt;variable name&gt</tt> to pring the value of the variable
+</ul>
+
+<hr>
+<a name=thread>
+<h4>Debugging threaded Java applications</h4>
+Debugging threaded java applications with jdb is a bit ugly.  For 
+threaded applications, try reducing the total number of application threads to
+one or two if possible.  Also, the Thread class has some methods to help you 
+debug threaded Java applications.  You can explicitly add debugging code to 
+your Java program to print out information about the threads in your program.
+<p>
+If all else fails, add debugging output statments to your code.
+</body>
+</html>

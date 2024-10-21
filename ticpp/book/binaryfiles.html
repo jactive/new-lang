@@ -1,0 +1,120 @@
+<html>
+	<body>
+
+		<h1> Extracting Information from .o and executable binary files<h1>
+	  </h1>
+				There are many tools for examining .o and a.out files.
+				<p>
+				<font color="blue">gcc</font> produces executable files in the 
+				ELF file format.  you can use <font color="blue">readelf</font> 
+				and <font color="blue">objdump</font> to read parts of an elf file. 
+				You can also use <font color="blue">'hexdump filename'</font> to get 
+				a hexdump of the contents of a binary file (this is likely only useful 
+				if you like reading machine code or you are writing an assembler).
+				<font color="blue">hexedit</font> works similarly, and
+				<font color="blue">'strings filename'</font> dumps all the strings
+				in the a.out or .o file.  <font color="blue">gdb</font> is also useful 
+				for examining executables.
+				<p>
+				If you run readelf and objdump without command line arguments both
+				will list the command line options.
+
+<p> 
+Here are some examples of cool things to try:
+
+<h4>List the top-level ELF header contents:</h4>
+<pre>
+# list the highest level header in the ELF file
+# this says that this is a ELF32 executable file, and gives 
+# information about the platform for which it was compiled
+
+% readelf -h a.out
+
+ELF Header:
+  Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  Class:                             ELF32
+  Data:                              2's complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              EXEC (Executable file)
+  Machine:                           Intel 80386
+  Version:                           0x1
+  Entry point address:               0x8048350
+  Start of program headers:          52 (bytes into file)
+  Start of section headers:          4772 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               52 (bytes)
+  Size of program headers:           32 (bytes)
+  Number of program headers:         7
+  Size of section headers:           40 (bytes)
+  Number of section headers:         38
+  Section header string table index: 35
+</pre>
+<h4>List information about the different sections of the process' address space:</h4>
+This lists the different sections of the process' address space that
+are specified from the a.out file:
+<pre>
+% readelf -S a.out
+
+Section Headers:
+ [Nr] Name              Type            Addr     Off    Size   ES Flg Lk Inf A  
+ ...
+ [13] .text             PROGBITS        08048350 000350 00023c 00  AX  0   0 16 
+ ...
+</pre>
+The entry above says that the .text section (most of the program's instrutions) 
+should be loaded at address 0x08048350 in its address space and that the .text
+section starts at offset 0x350 in the a.out file and has a size of 0x23c bytes.
+(all numbers are hexidecimal (base 16)).
+<p>
+<h4>Disassemble the code:</h4>
+You can use objdump to disassemble instructions in the a.out:
+<pre>
+$ objdump -d a.out
+
+# .init contains the process initialization code 
+# these are instructions that are executed first (before main)
+Disassembly of section .init:
+ ...
+
+# this is where calls to functions from dynamically linked libraries
+# go through:
+Disassembly of section .plt:   
+ ...
+
+# this is where most of the program's instructions come from
+# (code from dynamically linked libraries loaded at runtime is
+#  in another section, and not in the a.out file)
+Disassembly of section .text:
+...
+
+08048514 &lt;main&gt;:
+8048514:       8d 4c 24 04             lea    0x4(%esp),%ecx
+8048518:       83 e4 f0                and    $0xfffffff0,%esp
+804851b:       ff 71 fc                pushl  -0x4(%ecx)
+804851e:       55                      push   %ebp
+804851f:       89 e5                   mov    %esp,%ebp
+8048521:       51                      push   %ecx
+
+...
+
+
+# .fini contains instructions that are executed when a process terminates
+Disassembly of section .fini:
+...
+</pre>
+gdb can also be used to disassemble the code (use the diass command), and to 
+step through the execution of individual instructions (stepi, nexti) and 
+examine the values in registers.  Seem my <a href="howto_gdb.php#commands">gdb commands</a> for a few examples.
+Here is an example of a gdb command to disass the main function:
+<pre>
+gdb a.out
+(gdb) disass main
+</pre>
+
+
+
+
+	</body>
+</html>

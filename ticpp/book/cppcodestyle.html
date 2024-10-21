@@ -1,0 +1,188 @@
+<html>
+<body bgcolor="white">
+<h2> C++ Code Style Guidelines</h2>
+
+<table width="750">
+	<tr>
+		<td>
+<ul>
+<li> Use good OO design. Think carefully about the classes that you are
+creating before you start writing code.  Use the standard library classes
+and STL as much as possible.
+<p>
+<li> Use streams and stream operators rather than C style I/O functions,
+particularly for input.  printf, however, is often easier to use for 
+formated output to stdout.
+
+<p>
+<li> Always write a destructor for a class immediately after you write
+a constructor; this will help you to correctly implement the destructor
+code.
+<p>
+
+<li> Use good, descriptive names for class, method function, data member, 
+and variables. 
+<p>
+
+<li> Pick a capitalization style for class names, method function names,
+private data and methods, public data and methods, local variable names, 
+constants, etc.  and stick with it.  There are some conventions for many
+of these that are given below. 
+<p>
+
+<li> Avoid mixing C-style functions with C++ OO method functions.  You will
+	need C-style functions, like main and main helper functions for good 
+	modular design.  However, think carefully if the functionality should be
+	part of a class or a stand alone C function.  If you are writing OO code,
+	use good OO design to make decisions about which functionality should be 
+	part of a class: what is a functionality provided by this class/object?  
+	what is functionality provided by users of this object/class?
+<p>
+
+<li> Avoid using global variables; pass objects by reference instead.  Avoid
+global variables and #define, and instead use static data members, 
+and const as much as possible.  
+<p>
+
+<li> Avoid using multiple inheritance.  There are, of course, cases when
+it should be used, but these cases are rare and you should think carefully
+about other design options before deciding that this is the right one.
+<p>
+
+<li> <b>Comment your code!</b>  Every .h and .cpp file should have a 
+high-level comment at the top describing the file's contents, and should
+include your name(s) and the date.  In header files, write comments at top 
+of every class definition describing the class in a general way.  Also, 
+comment every method function (except trivial accessor and
+modifier methods) describing: (1) what function does; 
+(2) what its parameter values are; and (3) what values it returns.  
+In source files, comment functions similarly.  Class data members should
+be commented, unless their names make it obvious what they are
+(by choosing good names for data members, you can avoid commenting
+most of them).  In addition, any tricky code (in .h or .cpp files) 
+should contain in-line comments describing what it does. 
+<p>
+The general rule for .h vs. .cpp comments is that .h are for the user
+of the class (they don't necessarily care how the function is implemented,
+they just want to be able to call the function; they need to know 
+what it does, what it returns, and what to pass to it).  Comments in 
+.cpp files are for someone reading the implementation of the class (in addition
+to the .h file comment info, you may add more information about the algorithm
+used to implement the function).  I tend to create the .h file first, add
+all comments, then copy the .h to the .cpp (now I have all the function 
+comments for the function implementations that will be in the .cpp and I 
+only need to add additional comments about implementation).
+<p>
+When commenting stick to a particular style.  For example:
+<pre>
+	<b>// 
+	// public method function: getRadius
+	//   @param: none
+	//   @returns: the radius of the circle in inches 
+	//</b>
+	float SemiCircle::getRadius() { 
+	    return this-&gt;_radius;	
+	}
+
+	<b>// 
+	// public method function: flipOrRotate 
+	//	rotates the semi-circle by the given degree
+	//	and/or flips it over its radius 
+	//
+	//   @param deg: the number of degrees to rotate the semi-circle
+	//	  positve value will rotate clockwise
+	//	  negative value will rotate counter-clockwise
+	//   @param flip: if 1, flip the semi-circle over its radius
+	//	   before rotating  
+	//   @returns: no return value
+	//</b>
+	void SemiCircle::flipOrRotate(float deg, char flip) {
+		...
+</pre> 
+<li> Deciding where to put the implementation (the .h file or the .cpp file):
+Typically, short methods can be implemented in the .h file.
+Methods that are implemented in the .h file can be in-lined by an optimizing
+compiler, and short methods are good candidates for in-lining.  Longer methods
+typically do not benefit by being in-lined so they should not be implemented
+in the .h file... you want the .h file to be readable.   
+<p>
+<li> One way to distinguish class names from variables is to capitalize
+class names, with multi-word class having each word capitalized for 
+easier reading.  For example:
+<pre>
+	class <b>SemiCircle</b> : public <b>Shape</b> {
+
+	};
+</pre>
+<p>
+<li> Group data members and methods together in a logical way.  For example,
+you can group all public method functions first, followed by all public
+data members, then group all private functions, followed by all private
+data members.  Another option is to group all functions together (all public
+ones first followed by all private ones), then group all data members
+together (again public ones grouped first followed by the private ones).
+<p>
+
+<li> Public methods and data members should start with a lower-case 
+alphabetic character (and really you should avoid using any public data
+members).
+For example (note: comments have been removed here):
+<pre>
+	class SemiCircle : public Shape {
+	    public:
+		float  <b>getRadius</b>(); 
+		double area(); 
+		void   flipOrRotate(float deg, char flip); 
+		bool   <b>inRadians</b>; 
+	};
+</pre>
+<p>
+<li> Private method functions and data members could start with an 
+     underscore character to easily distinguish them from public 
+     function and data members. For example:
+<pre>
+	class SemiCircle : public Shape {
+	    public:
+		float  getRadius(); 
+		double area(); 
+		void   flipOrRotate(float deg, char flip); 
+		bool   inRadians; 
+	    private:
+		void  <b>_convert_to_radians</b>();
+		float <b>_radius</b>;
+	};
+</pre>
+<p>
+<li> Avoid using public data members.  Provide accesser/modifier methods 
+instead (if you implement these methods in the class definition, then 
+any compiler can in-line their code). For example:
+<pre>
+	class SemiCircle : public Shape {
+	    public:
+		float  getRadius(); 
+		double area(); 
+		<b>bool   isInRadians() { return _in_radians; } // accessor method</b>
+		<b>void   setRadians(bool on); { _in_radians = on; } // modifier</b>
+	    private:
+		void  _convert_to_radians();
+		float _radius;
+		bool  _in_radians;	// private data member
+	};
+</pre>
+<p>
+<li> Avoid using global variables as much as possible: values needed by
+functions should be passed as parameters, and functions should return values
+to the caller.  Constants and macros
+should be in all uppercase <b><code>const int MAX = 100;<code></b>.  
+(if you don't know what a macro is, good).
+</ul>
+<br> &nbsp;
+<br> &nbsp;
+<br> &nbsp;
+<br> &nbsp;
+<br> &nbsp;
+	</td>
+	</tr>
+</table>
+</body>
+</html>

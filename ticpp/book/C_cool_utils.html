@@ -1,0 +1,382 @@
+<html>
+	<body>
+		<h2>Some cool and very useful library functions for C and C++ programs</h2>
+
+		<h3>Contents:</h3>
+		<ul>
+			<li> <a href="C_cool_utils.html#getopt">getopt</a>: parse command line options
+			<li> <a href="C_cool_utils.html#readline">readline</a>: readin user input, has support for 
+			user line editing 
+			<li> <a href="C_cool_utils.html#escape">ascii escape codes</a>: for printing test to the terminal in different formats
+			<li> <a href="C_cool_utils.html#ncurses">ncurses</a>: terminal user interface library
+		</ul>
+		<hr>
+
+		<a name="getopt">
+		
+		<h2>getopt</h2>
+		getopt is used to parse command line arguments.  It is very useful 
+		for writing programs that take optional and/or required command line 
+		arguments, and supports command lines that list command line arguments
+		in any order.  It can be used to parse command line arguments 
+		that are specified with <tt>-x</tt> syntax:
+<pre>
+    -o opt_arg  -o  ... 
+</pre>
+    Many unix commands use this syntax, for example this 
+		command runs ls with -l (long listing) and -a (include dot files) 
+		options:
+<pre>
+    ls -l -a
+</pre>
+    A example command line in this syntax with
+		some command line options that take arguments,
+		might look like this:
+<pre> 
+    ./a.out -f infile.txt -t -p 100
+</pre>
+In this example, the a.out takes three command line options, -f -t and -p,
+where -f is a command line option that takes an argument (infile.txt), 
+and  -p is an option with an argument (100). 
+<p>
+The <tt>getopt</tt> function  takes the argc and argv command line arguments, and 
+an optstring that encodes information about the set of command line options:
+<pre>
+  int getopt(int argc, char * const argv[], const char *optstring);
+</pre>
+It is typically called inside a loop, each call returns the value of the
+next command line option in argv it parses.  The loop exits when getopts
+returns -1, indicating that there are no more 
+<p>
+For example, a call to getopt might look like this:
+<pre>
+  int main(int argc, char *argv[]) {
+    int opt;
+
+    while(1) { 
+       opt = getopt(argc, argv, "tpf:");  // the : after the option in the optstring argument means the option
+                                           // takes an arg (":tpf:" means t and p do not take arguments, and f does)
+  
+       if(opt == -1) { 
+         break; // no more command line arguments to parse, break out of while loop
+       } 
+     
+       // ... some code to handle the current option ...
+
+    } // end while
+</pre>
+
+The getopt function returns the char value of the that correspond to the 
+option (e.g. 't' for -t command line option), or -1 if there is nothing left to 
+parse.  See the man page for other return values. When it parses command 
+line options that take argument values, it also sets <tt>optarg</tt> to 
+the point to the argument (as a char * type).   For example, if it is currently 
+parsing the
+-f commad line option in the example above, a call to getop will return the
+char value `f` (its ascii value) and set optarg to point to the string 
+"infile.txt".  
+<p>
+the man page for getopt has an example (man 3 getopt).
+		<p>
+		<h4>Example</h4>
+		<h4>An example program you can copy and try out is here:</h4>
+<pre>
+  cp -r ~newhall/public/getopts_example .
+</pre>
+This is a full listing of that program.  See the <tt>process_args</tt>
+function for the bulk of the example, but note the types of paramters
+(and the arguments passed to it from <tt>main</tt>) and how parameters
+are set when different command line options with arguments
+are parsed by getopt based on their types.      
+
+It shows one way of handling
+shows one way of handling required command line options with extra
+state variables to flag when an option has be parsed): 
+<pre>
+/* Example of parsing command line options using getopt
+ *
+ * see the process_args function for the core of the example.
+ *
+ * Try running this will different command line options in different
+ * orders and see what happens.
+ * Try:  ./testopts
+ * Try:  ./testopts -p 1234
+ * Try:  ./testopts -p hello -c 
+ * Try:  ./testopts -c -f input.txt -p 6457 
+ * Try:  ./testopts -c -f  -p 6457 
+ * Try:  ./testopts -q -c  -p 6457 
+ * (newhall, 2016)
+ */
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+
+void usage(void);
+void process_args(int ac, char *av[], char **port_num, char *collector_only, 
+                  char **config_file, int *sleep_secs);
+
+
+/**********************************************************/
+int main(int argc, char *argv[]) {
+  char collector =0; 
+  int secs =5;
+  char *filename = NULL;
+  char * port = NULL;
+
+  process_args(argc, argv, &amp;port, &amp;collector, &amp;filename, &amp;secs);
+
+  printf("\n Arg values: -p %s -n %d ", port, secs); 
+  if(collector) { 
+    printf("-c "); 
+  }
+  if(filename) {
+    printf("-f %s\n", filename);
+  }
+  printf("\n");
+  return 0;
+}
+
+/**********************************************************/
+// prints out error message when user tries to run with bad command line args or
+// when user runs with the -h command line arg 
+void usage(void){
+  fprintf(stderr,
+      " usage:\n"
+      "    ./server -p portnum [-h] [-c] [-f configfile] [-n secs]\n"
+      "       -p  portnum:   use portnum as the listen port for server\n"
+      "       -h:            print out this help message\n"
+      "       -c:            run this server deamon in collector-only mode\n"
+      "       -f conf_file:  run w/conf_file instead of /etc/server.config\n"
+      "       -n secs:  how often damon sends its info to peers (default 5)\n"
+      "\n");
+}
+/**********************************************************/
+// parse command line arguments using getopt.
+//
+// most parameters are C style pass-by-pointer that this
+// function may set if an argument is in the command line
+//
+//   ac: argc value passed into main
+//   av: argv value passed into main
+//   port_num: set to -p num value
+//             (note: this is a char * passed by referece)
+//   collector_only: set to 1 if -c option
+//   config_file: set to point to string name of config file for -f option 
+//                (note: this is a char * passed by referece)
+//   sleep_secs: set to -n val
+//
+// this function may set the value of some of its agruments, based
+// on the particular command line  
+//
+void process_args(int ac, char *av[], char **port_num, 
+    char *collector_only, char **config_file, 
+    int *sleep_secs)
+{
+
+  int c, p=0;  // p is a flag that we set if we get the -p command line option
+
+  while(1){
+
+    // "p:"  means -p option has an arg  "c"  -c does not
+    // in this examle -p, -f and -n have arguments, -c and -h do not
+    c = getopt(ac, av, "p:chf:n:");  
+
+    if( c == -1) {  
+      break; // nothing left to parse in the command line
+    }
+
+    switch(c) {  // switch stmt can be used in place of some chaining if-else if 
+      case 'h': usage(); 
+                exit(0); 
+                break;  // break out of switch stmt
+      case 'p': *port_num = optarg; 
+                p = 1; 
+                break;
+      case 'c': *collector_only = 1; 
+                break;
+      case 'f': *config_file = optarg; 
+                break;
+      case 'n':
+                *sleep_secs = atoi(optarg);  // atoi converts a string to an int
+                if(*sleep_secs <= 0){        // (ex) atoi("1234") to int 1234
+                  *sleep_secs = 5;
+                }
+                break;
+      case ':': fprintf(stderr, "\n Error -%c missing arg\n", optopt);
+                usage(); 
+                exit(1); 
+                break;
+      case '?': fprintf(stderr, "\n Error unknown arg -%c\n", optopt);
+                usage(); 
+                exit(1); 
+                break;
+      default: printf("optopt: %c\n", optopt);
+    }
+  }
+  if(!p) {
+    fprintf(stderr,"Error: testopts must be run with command line option -p\n");
+    usage();
+    exit(1);
+  }
+}
+</pre>
+Some example command lines for this program are:
+<pre>
+    $ ./a.out -p 1234 -c
+    $ ./a.out -p 1234 -n 20 -f infile.conf
+    $ ./a.out -n 20 -c -p 1234 
+</pre>
+
+		<a name="readline">
+
+		<h2>readline</h2>
+
+	  readline is a GNU library for reading in user input.  It has support for
+		all kinds of line editing capabilities that the user can use to edit the
+		input line.  For example, the user can move the curser to different 
+		positions in the line, and modify parts of the input string.
+		See the readline man page and the readline homepage for complete information
+		about  the readline library:
+<a href="http://tiswww.case.edu/php/chet/readline/rltop.html">GNU readline homepage</a>
+
+	  <p>	
+		One very nice feature of readline is
+		that it mallocs up the space for the returned string.
+    Thus, a program can easily support reading in any sized user 
+		input string by simply calling readline.  Thus, even if you don't care 
+		about any of the line editing features of readline, it is still a 
+		handy way to read in user input. 
+
+<p>
+To use readline, you need to include readline header files and explicitly
+link with the readline library:
+<pre>
+    $ gcc -o myprog  myprog.c -lreadline
+</pre>
+<p>
+Here is a very simple example program:
+<pre>
+    #include&lt;stdlib.h&gt;
+    #include&lt;stdio.h&gt;
+    #include&lt;readline/readline.h&gt;
+    #include&lt;readline/history.h&gt;
+
+    int main(){
+
+       char* line;
+
+       line = readline("enter a string:  ");  // readline allocates space for returned string
+       if(line != NULL) { 
+           printf("You entered: %s\n", line);
+           free(line);   // but you are responsible for freeing the space
+       }
+    }
+</pre>
+As you run this, type in a line and before you hit <kbd>ENTER</kbd> try some
+of these commands to change the input string:
+<pre>
+    CNTRL-a   move curser to begining of input string
+    CNTRL-e   move curser to end of input string
+    CNTRL-b   move curser back one character
+    CNTRL-f   move curser forward one character
+    CNTRL-d   delete the character under the curser
+    CNTRL-k   kill the string from the curser to the end of the line
+    CNTRL-l   clear the screen and re-print the prompt and input string at the top
+</pre>
+<hr>
+<a name="escape">
+		<h2>ascii escape codes</h2>
+You can use ascii escape codes in C strings to print text to the 
+terminal in different colors (red, blue, ...), 
+with diffent attributes (bold, underscore, blink, ...)
+ The general form of an escape sequence is the following (any missing
+ component is assumed to be zero):
+ <pre>
+ \e[attribute code;text color code;background color codem
+ </pre>
+ The values for these are:
+ <pre>
+ Attribute codes:
+ ----------------
+ 0=none 1=bold 4=underscore 5=blink 7=reverse 8=concealed
+ Text color codes:
+ -----------------
+ 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
+ Background color codes:
+ ----------------------
+ 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
+ </pre>
+ The effect is ended by specifying:
+ <pre>
+ \e[0m
+ </pre>
+ For example, to print out the string Hello in red:
+ <pre>
+ printf("\e[0;31mHello\e[0m");
+ </pre>
+ For example, to print out the string Hello in bold blue:
+ <pre>
+ printf("\e[1;34mHello\e[0m");
+ </pre>
+
+
+<hr>
+<a name="ncurses">
+		<h2>ncurses</h2>
+		ncurses is a library for terminal-independent I/O to character screens.
+		It can be used to create character-based user interfaces to 
+		terminal windows.  
+		<p>
+		See the man page for ncurses for more information.  Also, here is an 
+<a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/">ncurses HOWTO</a>
+<p>
+To use ncurses library in your program, you need to include 
+the  ncurses.h header file, and link in the ncurses library:
+<pre>
+gcc -o myprog myprog.c -lncurses
+</pre>
+
+Here is a very simple example of printing to the terminal using different 
+colors:
+<pre>
+#include &lt;ncurses.h&gt;
+
+int main(){
+
+  initscr();  // initialize the ternimal in curses mode
+
+  start_color(); // start color mode
+
+  init_pair(1, COLOR_RED, COLOR_BLUE); // define a forground, background pair
+  attron(COLOR_PAIR(1));   // enable for/back ground color to use
+  printw("Hello World\n"); // print string to curses window
+  attroff(COLOR_PAIR(1));
+  refresh();               // forces printw output to curses window
+  getch();  // just wait for user input
+
+  init_pair(2, COLOR_YELLOW, COLOR_MAGENTA); // another for/background pair
+  attron(COLOR_PAIR(2));   // enable for/back ground color to pair # 2
+  printw("Hello World\n"); // print string to curses window
+  attroff(COLOR_PAIR(2));
+  refresh();               // forces printw output to curses window
+  getch();  // just wait for user input
+
+  printw("Hello World\n");  // print using default for/backround colors
+  refresh();               // forces printw output to curses window
+  getch();  // just wait for user input
+
+  endwin();  // end curses mode
+}
+</pre>
+Here are some reference: 
+<br> <a href="https://www.amazon.com/exec/obidos/ASIN/0937175021/bluesockorg-20">programing with curses: Unix C library for Screen Manipulation</a> O'Reilly publication.
+
+<br> <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/">ncurses HOWTO</a> The Linux Documentation Project
+
+<p> &nbsp;
+<p> &nbsp;
+<p> &nbsp;
+
+	</body>
+</html>

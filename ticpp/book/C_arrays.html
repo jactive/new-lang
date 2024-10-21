@@ -1,0 +1,410 @@
+<html>
+<body>
+<center>
+<h2>Arrays in C</h2>
+</center>
+
+C has support for single and multidimensional arrays. 
+Arrays can be statically allocated or dynamically allocated. 
+The way in which you access the array and its type varies based on
+how it is declared and allocated.  
+<p>
+<a href="C_arrays.html#static">Information about Statically Allocated Arrays</a>
+<br><a href="C_arrays.html#dynamic">Information about Dynamically Allocated Arrays</a>
+<br><a href="C_arrays.html#dynamic2D">Information about Dynamically Allocated 2D Arrays</a>
+<hr>
+
+<a name=static>
+<h2>statically declared arrays</h2>
+These are arrays whose number of dimensions and their size are known at 
+compile time.  
+Array bucket values are stored in contiguous
+memory locations (thus pointer arithmetic can be used to iterate over
+the bucket values), and 2D arrays are allocated in row-major order
+(i.e. the memory layout is all the values in row 0 first, followed by 
+the values in row1, followed by values in row 2 ...).
+Statically declared arrays can be declared as either
+global or local variables.  
+<h3>1-D arrays</h3>
+Some examples of declaration an use:
+<pre>
+int a1[100];  // declare a static array, a1, of 100 ints
+char c1[50];  // declare a static array, c1, of 50 chars
+
+
+// accessing array elements using indexing
+for(i=0; i &lt; 100; i++) {
+  a1[i] = 0;   
+}
+</pre>
+
+
+<h4>Array Parameters</h4>
+The base address of an array is passed to a function taking an
+array parameter (this means that the parameter points to the same
+array buckets as it argument, and thus through the parameter the
+function can modify the bucket values):
+<pre>
+// pass in the dimention of the array, n, to make this 
+// function work for any size array
+void init_array(int arr[], int n) {
+  int i;
+  for(i=0; i &lt; n; i++) {
+    arr[i] = i;   
+  }
+}
+
+int main() {
+  int array[100];
+
+  init_array(array, 100);
+	...
+</pre>
+
+<h4>Array Memory Layout</h4>
+Array buckets are allocated to contiguous memory locations (addresses):  
+<pre>
+array [0]:  base address 
+array [1]:  next address 
+array [2]:  next address
+  ...            ...
+array [99]: last address 
+</pre>
+The address of bucket i is at a offset i from the base address of
+the array (the exact value of the address depends on the number of 
+bytes in the type stored in each bucket):
+<pre>
+i*(sizeof(buckettype)) + array_base_addr 
+</pre>
+For example, for an int array each int value is stored in 4 bytes,
+so the addresses of buckets might look something like this:
+<pre>
+addr  bucket
+--------------
+1230: array[0] (base address of array)
+1234: array[1]
+1238: array[2]
+...   ...
+</pre>
+
+<h3>2-D Arrays</h3>
+
+For Multi-dimentional Arrays specify the size of each dimension.  
+For a statically declared 2 dimentional array:
+<pre>
+int matrix[50][100];  // declared a static 2D array of 50 rows, 100 cols
+</pre>
+To access individual bucket values, indicate both the row and the column index:
+<pre>
+ int val = matrix[3][7];  // get int value in row 3, column 7
+</pre>
+
+You can think of a 2-D array as a matrix of int values indexed by row and
+column index values:
+<pre>
+     0   1   2  3  ...   99
+ 0:
+ 1:
+ 2:             x
+ .
+ .
+ .
+49:                      y
+
+x is stored at matrix[2][3]
+y is stored at matrix[49][99]
+</pre>
+
+Often nested loops are used to access individual bucket values:
+<pre>
+for(i=0; i &lt; 50; i++) {
+  for(j=0; j &lt; 100; j++) {
+	   matrix[i][j] = 0;
+  }
+}
+</pre>
+
+<h4>2-D Array Memory Layout</h4>
+
+Data layout in memory is in Row Major Order.  This means that all of
+row 0's elements are first, followed by all of row 1's, ...
+<pre>
+matrix [0][0]:  base address 
+matrix [0][1]:  next address 
+matrix [0][2]:  next address
+  ...            ...
+matrix [0][99]:  
+matrix [1][0]: 
+matrix [1][1]: 
+  ...
+matrix [1][99]: 
+matrix [2][0]: 
+  ...
+matrix [49][0]: 
+matrix [49][1]: 
+  ...
+matrix [49][99]: 
+</pre>
+
+<h4>2-D Array Parameters</h4>
+The same rules apply for passing a multi dimentional array argument as a 1-dimentional array argument: the parameter is passed
+the base address of the 2-D array (the parameter points to the argument's
+array buckets and thus can change their values)
+<p>
+However, only the first dimension size can be unspecified in the parameter
+definition: you need to indicate that the parameter is a 2-D array, and 
+can leave the size of the first dimension unspecified (for good generic design), 
+but the second dimension is needed by the compiler to generate the correct address:
+<pre>
+void init_matrix(int m[][100], int rows) {
+  int i, j;
+  for(i=0; i &lt; rows; i++) {
+    for(j=0; j &lt; 100; j++) {
+	     m[i][j] = i*j;
+    }
+  }
+}
+
+int main() {
+  int matrix[50][100]; 
+  init_matrix(matrix, 50);
+
+</pre>
+
+<hr>
+<h4>Pointer Arithmetic</h4>
+
+In general I recommend avoiding using pointer arithmetic to access
+array buckets: it is easy to make errors and very hard to debug when you do).
+<p>
+However, you can use a pointer to point to each bucket value and then
+increment the pointer to point to the next one.  When incremented, a pointer 
+points to the very next storage location of that type (the address the pointer
+holds is incremented by the size of the type it points to): when incremented
+an int pointer point points to the very next int storage address (the address 
+4 bytes beyond the current one); and when incremented a pointer to a char
+points to the very next char storage address (the address 1 byte beyond 
+the current one).
+
+<pre>
+// accessing array elements using pointer arithmetic
+char *cptr = NULL;
+int *iptr = NULL;
+
+// make the pointer point to the first bucket in the array
+// the address of the start of an array is given two ways:
+//   &amp;(array[0])  the address of bucket 0 
+//   array            also the address of bucket 0 
+
+cptr = &amp;(c1[0]);   // initialize cptr to point to the start of c1
+iptr = a1;   // initialize aptr to point to the start of a1
+for(i=0; i &lt; 50; i++) {
+  *cptr = 'a';
+  *iptr = i;
+  cptr++;  // cptr points to the next valid char address (the next bucket of c1)
+  iptr++;  // iptr points to the next valid int address (the next bucket of a1)
+}
+
+// sets first matrix to: 
+// row 0:   0,   1,   2, ...,  99 
+// row 1: 100, 110, 120, ..., 199
+//        ...
+iptr = &amp;(matrix[0][0]);
+for(i=0; i &lt; 50*100; i++) {
+	*iptr = i;
+	iptr++;  
+}
+</pre>
+<hr>
+<a name=dynamic>
+<h2>dynamically allocated arrays</h2>
+
+Dynamically allocated arrays are allocated on the heap at run time.  The heap 
+space can be assigned to global or local pointer variables that store
+the address of the allocated heap space (point to the first bucket).  To dynamically
+allocate space, use calls to <tt>malloc</tt> passing in the total
+number of bytes to allocate (always use the <tt>sizeof</tt> to get the 
+size of a specific type).  A single call to malloc allocates a contiguous
+chunk of heap space of the passed size.
+<p>
+Some examples of declaration and use:
+<pre>
+
+// declare a pointer variable to point to allocated heap space
+int    *p_array;
+double *d_array;
+
+// call malloc to allocate that appropriate number of bytes for the array
+
+p_array = (int *)malloc(sizeof(int)*50);      // allocate 50 ints
+d_array = (int *)malloc(sizeof(double)*100);  // allocate 100 doubles
+
+// always CHECK RETURN VALUE of functions and HANDLE ERROR return values
+// here is one example of handling an unrecoverable malloc error 
+// (other error handling code is removed from this document for readability):
+if(p_array == NULL) {
+  printf("malloc of size %d failed!\n", 50);   // could also call perror here
+  exit(1);   // or return an error to caller
+}
+
+
+// use [] notation to access array buckets 
+// (THIS IS THE PREFERED WAY TO DO IT)
+for(i=0; i &lt; 50; i++) {
+  p_array[i] = 0;
+}
+
+// you can use pointer arithmetic (but in general don't)
+double *dptr = d_array;    // the value of d_array is equivalent to &amp;(d_array[0])
+for(i=0; i &lt; 50; i++) {
+  *dptr = 0;
+  dptr++;
+}
+</pre>
+
+<a name=dynamic2D>
+<h3>dynamically allocated 2D arrays</h3>
+Dynamically declared 2D arrays can be allocated in one of two ways.
+For a NxM 2D array:
+<ol>
+	<li> Allocate a single chunk of NxM heap space
+	<li> Allocate an array of arrays: allocate 1 array of N pointers to arrays,
+	and allocate N  M bucket array of values (on for each row).
+	You could also allocate each column independently and have an 
+	array of column arrays.
+</ol>
+Depending on the method, the declaration and access methods differ.
+
+<h4>Method 1: the memory efficient way</h4>
+<pre>
+// (1) a single NxM malloc: really this is a large 1-dim array of int values
+//     onto which we will map 2D accesses 
+// 
+
+// declaration and allocation:
+
+int *2d_array;    // the type is a pointer to an int (the bucket type)
+2d_array = (int *)malloc(sizeof(int)*N*M);
+
+// in memory: 
+//                   row 0       row 1     row 2 ...
+// 2d_array -----&gt; [ 0, 0, ... , 0, 0, ... 0, 0, ... ] 
+
+// access using [] notation: 
+//    cannot use [i][j] syntax because the compiler has no idea where the 
+//    next row starts within this chunk of heap space, so must use single 
+//    index value that is calculated using row and column index values and 
+//    the column dimension
+for(i=0; i &lt; N; i++) {
+  for(j=0; j &lt; M; j++) {
+	   2d_array[i*M +j] = 0;
+  }
+}
+
+
+// access using pointer arithmetic (all N*M buckets are contiguous)
+int *ptr = 2d_array;
+for(i=0; i &lt; N; i++) {
+  for(j=0; j &lt; M; j++) { 
+     *ptr = 0; 
+     ptr++;
+  }
+}
+</pre>
+<h4>The Method 1 Way (single Malloc) and function parameters</h4>
+
+The base address of an array allocated this way is a pointer to an int,
+so it can be passed to a function with an (int *) parameter:
+<pre>
+void init2D(int *arr, int rows, int cols) {
+  int i,j;
+  for(i=0; i &lt; rows; i++) {
+    for(j=0; j &lt; cols; j++) {
+	     arr[i*cols +j] = 0;
+    }
+  }
+}
+int main() {
+  int *array;
+  array = malloc(sizeof(int)*N*M);
+  if(array != NULL) {
+    init2D(arr, N, M);
+  }
+	...
+</pre>
+
+<h4>Method 2: the "can still use [r][c] syntax to access" way</h4>
+
+<pre>
+// (2) N mallocs, one for each row, plus one malloc for array of row
+//     arrays.  The bucket locations in individual rows are contiguous, 
+//     but rows are not necessarily contiguous in heap space.
+// 
+int **2d_array; // an array of int arrays (a pointer to pointers to ints)
+
+// declaration and allocation: 
+
+// allocate an array of N pointers to ints
+// malloc returns the address of this array (a pointer to (int *)'s)
+2d_array = (int **)malloc(sizeof(int *)*N);
+
+// for each row, malloc space for its buckets and add it to 
+// the array of arrays
+for(i=0; i < N; i++) {
+  2d_array[i] = (int *)malloc(sizeof(int)*M);
+}
+
+// in memory: 
+// 2d_array -----&gt; | *-|-------&gt; [ 0, 0, 0, ... , 0]  row 0
+//                 | *-|-------&gt; [ 0, 0, 0, ... , 0]  row 1
+//                 |...|                               ...
+//                 | *-|-------&gt; [ 0, 0, 0, ... , 0] 
+
+// access using [] notation:
+//  2d_array[i] is ith bucket in 2d_array, which is the address of 
+// a 1d array, on which you can use indexing to access its bucket value
+for(i=0; i &lt; N; i++) {
+  for(j=0; j &lt; M; j++) {
+     2d_array[i][j] = 0;
+  }
+}
+
+// CANNOT access every bucket with pointer arithmetic
+// as an offset from the base address of bucket [0][0]
+// (NOT all of the N*M buckets are contigous)
+// but each row of buckets are contiguous, so can use
+// pointer arithmetic within each row of values
+int *ptr;
+for(i=0; i &lt; N; i++) {
+  *ptr = 2d_array[i];  // set pointer to address of bucket 0 in row i
+  for(j=0; j &lt; M; j++) { 
+     *ptr = 0; 
+     ptr++;
+  }
+}
+</pre>
+<h4>The Method 2 Way (array of arrays mallocs) and function parameters</h4>
+
+The array argument's type is (int **), which is different from the Method 1
+way's type.  It therefore needs different functions for accessing array
+bucket values:
+<pre>
+void init2D_Method2(int **arr, int rows, int cols) {
+  int i,j;
+  for(i=0; i &lt; rows; i++) {
+    for(j=0; j &lt; cols; j++) {
+	     arr[i][j] = 0;
+    }
+  }
+}
+int main() {
+  int **array;
+	// some code to allocate the row array and multiple col arrays
+	...
+  init2D_Method2(array, N, M);
+	...
+</pre>
+
+</body>
+
+</html>

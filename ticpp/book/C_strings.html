@@ -1,0 +1,107 @@
+<html>
+<body>
+<center>
+<h2>Strings in C</h2>
+</center>
+
+A string in C is an array of char values terminated by a special null
+character value '\0'.  For example, here is a statically declared string
+that is initialized to "hi":
+<pre>
+	char str[3];	// need space for chars in str, plus for terminating '\0' char
+	str[0] = 'h';
+	str[1] = 'i';
+	str[2] = '\0';
+	printf("%s\n", str);   // prints hi to stdout 
+</pre>
+<h4>C library functions for strings (string.h)</h4>
+C provides a library for strings.  C string library functions do not
+allocate space for the strings they manipulate, nor do they check that
+you pass in valid strings; it is up to your program
+to allocate space for the strings that the C string library will use.
+Calling string library functions with bad address values will cause
+a segfault or "strange" memory access errors.  
+<p>
+Here is a description of some of the functions in the Stardard C string 
+libarary (string.h) for manipulating strings:
+<pre>
+#include &lt;string.h&gt;
+
+int strlen(char *s);   // returns the length of the string 
+                       // not including the null character
+
+char *strcpy(char *dst, char *src);  // copies string src to string dst up 
+                                     // unitl first '\0' character in src
+				     // returns a ptr to the destination string
+				     // it adds '\0' to end of the copy
+
+char *strncpy(char *dst, char *src, int size);  // copies up to first '\0' or size characters 
+                                                // from src to dst
+
+int strcmp(char *s1, char *s2);  // returns 0 if s1 and s2 are the same strings
+                                 // a value < 0 if s1 is less than s2 
+                                 // a value > 0 if s1 is greater than s2 
+
+char *strcat(char *dst, char *src)  // append chars from src to end of dst 
+				    // returns ptr to dst, it adds '\0' to end
+char *strncat(char *dst, char *src, int size);
+
+char *strstr(char *string, char *substr);  // locates a substering inside a string
+					   // returns a pointer to the begining of substr in string
+                                           // returns NULL if substr not in string
+
+char *strchr(const char *s, int c);        // locate a character in a string
+char *strtok(char *s, const char *delim); // extract tokens from strings
+</pre>
+<p>
+In addition there are some functions in stdlib.h for converting between
+strings and other C types:
+<pre>
+#include &lt;stdlib.h&gt;
+
+int atoi(const char *nptr);		// convert a string to an integer  
+					// "1234" to int value 1234
+double atof(const char *nptr);
+
+</pre>
+To get on-line documentation of C functions, use Unix's man utility:
+<pre>
+        % man strcpy
+</pre>
+<a href="man.html">Here</a>
+is more information about using man.
+<p>
+
+<h4>Using strings in C programs</h4>
+
+One thing to keep in mind when allocating space for strings is that you need to
+allocate one more space than the number of characters in the string so that
+you can store the terminating '\0' character.
+<p>
+Here are some examples of using these functions:
+<pre>
+int main() {
+	int size;
+	char *static_str = "hello there";   
+	char *new_str = NULL;
+	char *ptr = NULL;
+
+	printf("%s\n", static_str);  // prints "hello there"
+	size = strlen(static_str);
+	new_str = malloc(sizeof(char)*(size+1)); // need space for '\0'
+	if(new_str == NULL) { 
+		Error("malloc failed\n"); 
+	}
+	strncpy(new_str, static_str, 6);
+	strcat(new_str, "yo");
+	printf("%s\n", new_str);	// prints "hello yo"
+	if((ptr = strstr(new_str, "yo")) != NULL) {
+		printf("%s\n", ptr);	// prints "yo"
+	}
+	free(new_str);
+}
+</pre>
+
+</body>
+
+</html>

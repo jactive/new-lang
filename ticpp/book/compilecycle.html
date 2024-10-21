@@ -1,0 +1,379 @@
+<html>
+	<body>
+
+		<h1>
+			Tools for examining different phases of compiling and running a C program 
+		</h1>
+
+		This page provides information about the different phases of compiling 
+		and running a C (or C++) program and tools that can be used to examine 
+		the results of these different phases.
+		<p>
+		The different phases examined below are:
+		<ol>
+			<li> <a href="compilecycle.html#cpp">the preprocessor</a> (expands #'s)
+			<li> <a href="compilecycle.html#comp">the compiler</a>  (produces .s or .o files)
+			<li> <a href="compilecycle.html#assemb">the assembler</a>  (produces .o files from .s files)
+			<li> <a href="compilecycle.html#link">the link editor</a> (produces a.out files) 
+			<li> <a href="compilecycle.html#runtime">the runtime linker</a> (loads and links shared libraries used by a.out)
+		</ol>
+		The different tools used to examine compiler output include:
+		<ul>
+			<li> objdump 
+			<li> readelf
+			<li> gdb (the disass command in particular)
+			<li> nm
+			<li> ldd
+			<li> <a href="compilecycle.html#file">file</a>
+			<li> hexdump, hexedit, strings
+		</ul>
+		<p> 
+		<a href="http://web.cs.swarthmore.edu/~newhall/unixhelp/binaryfiles.html">More information and examples using some of these tools to examine .o and a.out files</a> (hexdump, strings, objdump, gdb).
+<p>
+<hr>
+The following program is used as an example below (it is also available in 
+~newhall/public/cs75/compilecycle/ with a Makefile for building .o and 
+executable files):
+<pre>
+// simple.c:
+#include &lt;unistd.h&gt;
+
+#define MAX  10
+
+int foo(int y);
+
+main() {
+
+  int x, i;
+  char buf[10];
+
+  for(i=0; i < MAX; i++) {
+    x = foo(i);
+    // a crazy way to print to stdout
+    sprintf(buf, "%d", x);
+    write(0, buf, strlen(buf));
+    buf[0] = '\n';
+    write(0, buf, 1);
+  }
+
+}
+int foo(int y) {
+  return y*y;
+}
+</pre>
+
+<a name="file">
+<hr>
+The Unix <tt>file</tt> command can be used to find out information about the
+type of a file.  For example:
+<pre>
+# the C source file:
+#
+$ file simple.c
+  simple.c: ASCII C program text
+
+# the object file: produces relocatable machine code
+#   ELF: stands for Executable and Linking Format, and is the format for
+#        .o, a.out, and .so files produced by gcc.  The format is necessary
+#        so that programs that process these files, and the OS, know how
+#        to find different parts of the code and data in this file
+#   Intel 80386: is the target architecture 
+#   not stripped: means that this .o file includes a symbol table
+#
+$ file simple.o
+  simple.o: ELF 32-bit LSB relocatable, Intel 80386, version 1 (SYSV), not stripped
+
+# the executable file: 
+#
+$ file simple
+  simple: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), for 
+  GNU/Linux 2.6.8, dynamically linked (uses shared libs), not stripped
+
+# a shared object file (dynamically linked library): 
+#  
+$ file /lib/libc-2.7.so 
+  /lib/libc-2.7.so: ELF 32-bit LSB shared object, Intel 80386, version 1 (SYSV),
+  for GNU/Linux 2.6.8, stripped
+</pre>
+<hr>
+<a name="cpp">
+<ol>
+<li> <h3>The preprocessor</h3>
+
+The C preprocessor (cpp) is the first part of the compiler
+to run.  You can run cpp directly on the simple.c or you can run gcc with
+the -E flag to run just the preprocessor part of the compiler
+that expands #include (replaces them with .h file contents), #define
+(replaces macro and constant use with their definition), and #if (determines
+conditional inclusion):
+<pre>
+# run cpp: 
+$ cpp simple.c | less
+
+# run just the preprocessor part of gcc:
+$gcc -E simple.c  | less
+
+# look at the output to see what happens to #includes and #defines from simple.c
+</pre>
+<a href="http://gcc.gnu.org/onlinedocs/cpp/index.html#Top">here</a> is 
+a very detailed reference about the pre-processor.
+
+<a name="comp">
+<li> <h3>The core compiler</h3>
+
+The core of the C compiler translates the preprocessor's C source code
+output to machine-specific assembly code (an .s file).  Some core compilers 
+may directly translate to relocatable binary machine code (a .o file) instead
+of to assembly code (assembly code is approximately a human-readable form of 
+machine code). 
+<p>
+This phase does the bulk of the compilation work, translating a program written
+in the C high-level programming language to low-level instructions for
+a specific instruction set architecture (ISA).  A processor microarchitecture 
+that implments this ISA can execute these instructions.  For example, 
+both Intel and AMD have processors that can execute the IA32 ISA.
+
+<p>
+Use the -S option to gcc to produce a .s file:
+<pre>
+$ gcc -S simple.c
+</pre>
+This creates a text file, simple.s, of the C to assembly code translation. 
+The simple.s file can be viewed using a text editor:
+<pre>
+$ vim simple.s
+</pre>
+<p>
+Use the -c option to gcc to produce a .o file:
+
+<pre>
+$ gcc -c simple.c
+</pre>
+
+You can see the assembly code in simple.o using either <b>objdump</b> or 
+<b>gdb</b> (all addresses are listed in hexidecimal (base 16)):
+<pre>
+$ objdump -d simple.o
+  ...
+  00000000 <main>:
+   0:   8d 4c 24 04             lea    0x4(%esp),%ecx
+   4:   83 e4 f0                and    $0xfffffff0,%esp
+   7:   ff 71 fc                pushl  -0x4(%ecx)
+   a:   55                      push   %ebp
+   b:   89 e5                   mov    %esp,%ebp
+   d:   51                      push   %ecx
+   e:   83 ec 34                sub    $0x34,%esp
+  11:   65 a1 14 00 00 00       mov    %gs:0x14,%eax
+  17:   89 45 f8                mov    %eax,-0x8(%ebp)
+  1a:   31 c0                   xor    %eax,%eax
+  ...
+</pre>
+<pre>
+$ gdb simple.o
+ (gdb) disass main
+ (gdb) disass foo
+ (gdb) quit
+</pre>
+
+<a name="assemb">
+<li> <h3>The Assembler</h3>
+	If the core compiler produces assembly code (vs. relocatable object
+	code), then the Assembler part of the compiler runs next to translate
+	the assembly code to relocatable object code.  This step is a very simple
+	translation of the core compiler's assembly code output to its corresponding
+	binary machine code equivalent.  Some ISAs may have a handful of assembly 
+	instructions that are implemented by a sequence of two or more machine 
+	code instructions, but this is mostly a simple 1-1 mapping of assembly to 
+	machine instructions.
+
+<a name="link">
+<li> <h3>The link editor</h3>
+
+The link editor creates an executable file (a.out file) from one or 
+more .o files and .a or .so files (static or dynamic libraries):
+<pre>
+# create an executable file from simple.o and some standard libraries that gcc automatically links in:
+gcc -o simple simple.o
+</pre>
+
+<h4>Disassembling Executable Code:</h4>
+
+You can use <b>objdump</b> (or in gdb the disass command) to disassemble 
+the code in the executable (simple) to see how it differs from the 
+code in simple.o  (look at the call instructions)
+<pre>
+$ objdump -d simple
+ ...
+08048434 <main>:
+ 8048434:       8d 4c 24 04             lea    0x4(%esp),%ecx
+ 8048438:       83 e4 f0                and    $0xfffffff0,%esp
+ 804843b:       ff 71 fc                pushl  -0x4(%ecx)
+ 804843e:       55                      push   %ebp
+ 804843f:       89 e5                   mov    %esp,%ebp
+ 8048441:       51                      push   %ecx
+ 8048442:       83 ec 34                sub    $0x34,%esp
+ 8048445:       65 a1 14 00 00 00       mov    %gs:0x14,%eax
+ 804844b:       89 45 f8                mov    %eax,-0x8(%ebp)
+ 804844e:       31 c0                   xor    %eax,%eax
+ 8048450:       c7 45 e4 00 00 00 00    movl   $0x0,-0x1c(%ebp)
+ 8048457:       eb 6d                   jmp    80484c6 <main+0x92>
+ ...
+</pre>
+
+<h4>Viewing the Symbol Table:</h4>
+
+Use <b>nm (or objdump -t)</b> to list the symbol table from an a.out or .so file
+
+<pre>
+$ nm --format sysv simple	# system V format is easier to read than bsd format which is the default
+
+Name                  Value   Class        Type         Size     Line  Section
+
+...
+foo                 |080484e6|   T  |              FUNC|0000000c|     |.text
+frame_dummy         |08048410|   t  |              FUNC|        |     |.text
+main                |08048434|   T  |              FUNC|000000b2|     |.text
+p.5841              |080496dc|   d  |            OBJECT|        |     |.data
+sprintf@@GLIBC_2.0  |        |   U  |              FUNC|00000034|     |*UND*
+strlen@@GLIBC_2.0   |        |   U  |              FUNC|000000af|     |*UND*
+write@@GLIBC_2.0    |        |   U  |              FUNC|00000076|     |*UND*
+
+Section *UND* means that these symbols are from .so files that will be
+loaded at run-time, Section .text means that these are in the .text 
+section of the executable file (the code section).  Class T and t are 
+functions and D and d are data (global variables), R is read-only data, 
+the Value column gives the address of the function or data.
+</pre>
+
+<a name="runtime">
+<li> <h3>The runtime linker and dynamically linked libraries: </h3>
+
+The runtime linker loads and links shared object files (dynamically
+linked library code) used by the a.out at runtime.  Calls from the
+a.out to library functions are bound to functions from library shared 
+object files, loaded at runtime into the process' address space. 
+
+<h4>Listing shared object dependencies and the dynamic symbol table:</h4>
+
+<b>ldd</b> will list shared object dependencies on an a.out or .so files
+(i.e. which shared objects need to be loaded at runtime to run the a.out
+or with loading the .so):
+<pre>
+ldd simple
+        linux-gate.so.1 =&gt;  (0xb7ef2000)
+        libc.so.6 =&gt; /lib/tls/i686/cmov/libc.so.6 (0xb7d8a000)
+        /lib/ld-linux.so.2 (0xb7ef3000)
+</pre>
+
+Use <b>objdump -T</b> to see dynamic symbol table entries from a .so file 
+(here we are just finding the one for write):
+
+<pre>
+$ objdump -T /lib/libc.so.6 | grep write     
+
+000b6ab0  w   DF .text  00000076  GLIBC_2.0   write
+</pre>
+
+<h4>Runtime linker Steps and viewing at runtime:</h4>
+
+The runtime linker sets entries in the PLT (procedure linkage table) and/or
+the GOT (global offset table) at runtime to bind variables and functions
+to their locations in shared objects (dynamically linked libraries) that 
+are loaded at runtime.  What exactly is done depends on the format of the 
+a.out file and the underlying OS/Arch.
+<p>
+If you do objdump -d simple you can see that the call to write in main
+is a call into the .plt section of the a.out (which contains the PLT):
+<pre>
+08048434 <main>:
+  ...
+  804849e:       e8 c9 fe ff ff          call   804836c <write@plt>
+
+Disassembly of section .plt:
+  ...
+0804836c <write@plt>:
+ 804836c:       ff 25 c4 96 04 08       jmp    *0x80496c4
+ 8048372:       68 10 00 00 00          push   $0x10
+ 8048377:       e9 c0 ff ff ff          jmp    804833c <_init+0x30>
+
+</pre>
+
+The jmp *0x80496c4 instruction is jumping to a value stored in the 
+Global Offset Table (GOT) at address 0x80496b0.  The value in the
+GOT is loaded at runtime by the dynamic linker.
+<p>
+To see what this value is set to at runtime, disassemble instructions in 
+gdb:
+<ol>
+<li> set a breakpoint at write and run
+<pre>
+$ gdb simple
+(gdb) break *0x0804849e
+(gdb) cont
+(gdb) disass main
+...
+0x0804849e <main+106>:  call   0x804836c <write@plt>
+...
+</pre>
+
+<li> disassemble the PLT entry that is called from main (the call to write
+in libc.so):
+<pre>
+</pre>
+<pre>
+(gdb) disass 0x804836c
+Dump of assembler code for function write@plt:
+0x0804836c <write@plt+0>:       jmp    *0x80496c4
+0x08048372 <write@plt+6>:       push   $0x10
+0x08048377 <write@plt+11>:      jmp    0x804833c <_init+48>
+
+</pre>
+<li> disassemble instructions around 0x80496c4 just to see that the 
+jmp target is stored in a location in the GOT (ignore the disassembled 
+"instructions" in the GOT: the GOT stores jump target addresses not 
+instructions, so the disassembled target addresses have no meaning):
+<pre>
+(gdb) disass 0x80496c4
+Dump of assembler code for function _GLOBAL_OFFSET_TABLE_:
+0x080496b0 <_GLOBAL_OFFSET_TABLE_+0>:   fcoml  0x66680804(%ebp)
+0x080496b6 <_GLOBAL_OFFSET_TABLE_+6>:   icebp  
+0x080496b7 <_GLOBAL_OFFSET_TABLE_+7>:   mov    $0x30,%bh
+0x080496b9 <_GLOBAL_OFFSET_TABLE_+9>:   fdiv   %st,%st(0)
+0x080496bb <_GLOBAL_OFFSET_TABLE_+11>:  mov    $0xb0,%bh
+0x080496bd <_GLOBAL_OFFSET_TABLE_+13>:  xchg   %eax,%ebx
+0x080496be <_GLOBAL_OFFSET_TABLE_+14>:  fnsave 0x8048362(%edi)
+0x080496c4 <_GLOBAL_OFFSET_TABLE_+20>:  rclb   -0x7c8f481b(%edx)
+0x080496ca <_GLOBAL_OFFSET_TABLE_+26>:  fidivl -0x481fbdb0(%edi)
+0x080496d0 <_GLOBAL_OFFSET_TABLE_+32>:  mov    %al,0x80483
+</pre>
+
+<li> print out the value stored in the GOT table for write 
+(the GOT entry is at address 0x80496c4 and it contains the
+address of the write function (0xb7e592d0)):
+<pre>
+(gdb) print/x *0x80496c4
+$2 = 0xb7e592d0
+</pre>
+
+<li> now try disassembling code around address 0xb7e592d0 to see code
+from the write function from libc.so:
+<pre>
+(gdb) disass 0xb7e592d0
+Dump of assembler code for function write:
+0xb7e592d0 <write+0>:  cmpl   $0x0,%gs:0xc
+0xb7e592d8 <write+8>:  jne    0xb7e592fc <write+44>
+0xb7e592da <write+10>:  push   %ebx
+0xb7e592db <write+11>:  mov    0x10(%esp),%edx
+0xb7e592df <write+15>:  mov    0xc(%esp),%ecx
+0xb7e592e3 <write+19>:  mov    0x8(%esp),%ebx
+...
+</pre>
+</ol>
+<p>
+
+<p>
+<a href="http://web.cs.swarthmore.edu/~newhall/unixhelp/binaryfiles.html">
+Here</a>
+is some more information about readelf, objdump, and other tools:	
+	</body>
+</html>

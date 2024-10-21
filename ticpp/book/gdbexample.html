@@ -1,0 +1,274 @@
+<html>
+<body>
+	<h3>Sample gdb run</h3>
+	Below is output from two runs of gdb on programs from ~newhall/public/gdb_examples/.
+	<ol>
+		<li> <a href="gdbexample.html#badprog">Run 1</a> is a gdb run of badprog.c. 
+	It demonstrates some common gdb commands, and it finds one of the bugs in 
+	this program...there are others.
+	<p>
+	<li> <a href="gdbexample.html#segfaulter">Run 2</a> is a gdb run of segfaulter.c. 
+	It demonstrates how to find out where your program is segfaulting (and
+	perhaps why...although valgrind will help more with this type of error).
+</ol>
+<hr>
+<a name="badprog">
+	<h3>Run 1: badprog.c</h3>
+<pre>
+
+<b>% gcc -g badprog.c</b>           <b>#-- compile program with -g flag</b>
+
+
+<b>% gdb a.out</b>                  <b>#-- invoke gdb with the executable</b>
+
+GNU gdb 6.4.90-debian
+Copyright (C) 2006 Free Software Foundation, Inc.
+GDB is free software, covered by the GNU General Public License, and you are
+welcome to change it and/or distribute copies of it under certain conditions.
+Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.  Type "show warranty" for details.
+This GDB was configured as "i486-linux-gnu"...Using host libthread_db library "/lib/tls/libthread_db.so.1".
+
+<b>(gdb) break main</b>              <b>#-- set a breakpoint at the begining of the program's execution</b>
+
+Breakpoint 1 at 0x8048436: file badprog.c, line 36.
+
+
+<b>(gdb) run</b>                     <b>#-- run the program</b>
+
+Starting program: /home/newhall/public/gdb_examples/a.out 
+
+<b>Breakpoint 1, main () at badprog.c:36</b>      <b>#-- gdb stops at breakpoint	</b>
+
+36	  int arr[5] = { 17, 21, 44, 2, 60 };
+
+<b>(gdb) list</b>                                 <b>#-- list the source code near the break point</b>
+31	  return 0;
+32	}
+33	
+34	int main(int argc, char *argv[]) {
+35	
+36	  int arr[5] = { 17, 21, 44, 2, 60 };
+37	
+38	  int max = arr[0];
+39	
+40	  if ( findAndReturnMax(arr, 5, max) != 0 ) {
+
+
+<b>(gdb) list 11</b>                            <b>#-- list source code around line 11</b>
+
+11	// this function should find the largest element in the array and
+12	// "return" it through max
+13	// 	array: array of integer values
+14	// 	len: size of the array
+15	// 	max: set to the largest value in the array 
+16	//  	reuturns: 0 on success and non-zero on an error
+17	//
+18	int findAndReturnMax(int *array1, int len, int max) {
+19	
+20	  int i;
+
+<b>(gdb) list</b>                              <b>#-- list the next few lines of code</b>
+21	
+22	  if(!array1 || (len <=0) ) { 
+23	    return -1; 
+24	  }
+25	  max = array1[0];
+26	  for(i=1; i <= len; i++) {
+27	    if(max < array1[i]) { 
+28	      max = array1[i];
+29	    }
+30	  }
+
+<b>(gdb) next</b>                             <b>#-- execute the next instruction</b>
+38	  int max = arr[0];
+
+<b>(gdb) </b>                                <b>#-- hitting Enter executes the previous command (next in this case)</b>
+40	  if ( findAndReturnMax(arr, 5, max) != 0 ) {
+
+<b> #-- also you can use the up and down arrows to scroll through previous commands</b>
+
+
+<b>(gdb) print max</b>                        <b>#-- print out the value of max</b>
+$1 = 17
+
+<b>(gdb) p arr</b>                            <b>#-- p is short for the print command</b>
+$2 = {17, 21, 44, 2, 60}
+
+<b>(gdb) step        #-- step into the function call</b>
+                  <b>#-- if we had entered 'next' the entire function call would have been executed</b>
+
+findAndReturnMax (array1=0xbfc5cb3c, len=5, max=17) at badprog.c:22
+22	  if(!array1 || (len <=0) ) {             <b>#-- 'step' takes us to the entry point of findAndReturnMax</b>
+
+<b>(gdb) print array1[0]</b>                   <b>#-- lets see what the param values are</b>
+$3 = 17
+<b>(gdb) p max</b> 
+$4 = 17
+
+<b>(gdb) list</b>
+17	//
+18	int findAndReturnMax(int *array1, int len, int max) {
+19	
+20	  int i;
+21	
+22	  if(!array1 || (len <=0) ) { 
+23	    return -1; 
+24	  }
+25	  max = array1[0];
+26	  for(i=1; i <= len; i++) {
+
+<b>(gdb) break 26</b>                           <b>#-- set a breakpoint inside findAndReturnMax</b>
+
+Breakpoint 2 at 0x80483e7: file badprog.c, line 26.
+
+<b>(gdb) cont</b>                               <b>#-- continue the execution</b>
+Continuing.
+
+Breakpoint 2, findAndReturnMax (array1=0xbfc5cb3c, len=5, max=17)    <b>#-- gdb hits the breakpoint </b>
+    at badprog.c:26
+26	  for(i=1; i <= len; i++) {
+
+<b>(gdb) p i</b>
+$5 = 0
+
+<b>(gdb) n</b>                                   <b>#-- n is short for next</b>
+27	    if(max < array1[i]) { 
+
+<b>(gdb) display max</b>                         <b>#-- display will print out the value everytime we hit a breakpoint</b>
+1: max = 17                                      
+
+<b>(gdb) display array1[i]</b>
+2: array1[i] = 21
+
+<b>(gdb) break 27</b>                            <b>#-- set a breakpoint inside the loop</b>
+Breakpoint 3 at 0x80483f0: file badprog.c, line 27.
+
+<b>(gdb) cont</b>                                <b>#-- continue execution</b>
+Continuing.
+
+Breakpoint 3, findAndReturnMax (array1=0xbfc5cb3c, len=5, max=21)
+    at badprog.c:27
+27	    if(max < array1[i]) { 
+<b>#-- display prints these out:</b>
+2: array1[i] = 44                        
+1: max = 21
+
+<b>(gdb) cont</b>
+Continuing.
+
+Breakpoint 3, findAndReturnMax (array1=0xbfc5cb3c, len=5, max=44)
+    at badprog.c:27
+27	    if(max < array1[i]) { 
+2: array1[i] = 2
+1: max = 44
+
+<b>(gdb) cont</b>
+Continuing.
+
+Breakpoint 3, findAndReturnMax (array1=0xbfc5cb3c, len=5, max=44)
+    at badprog.c:27
+27	    if(max < array1[i]) { 
+2: array1[i] = 60
+1: max = 44
+
+<b>(gdb) cont</b>
+Continuing.
+
+Breakpoint 3, findAndReturnMax (array1=0xbfc5cb3c, len=5, max=60)
+    at badprog.c:27
+27	    if(max < array1[i]) { 
+2: array1[i] = 17
+1: max = 60                     <b>#-- so max is 60 here</b>
+
+<b>(gdb) where</b>                 <b>#-- show the stack frames</b> 
+
+<b>#-- findAndReturnMax is the active function at line 27, it was called by main at line 40:</b>
+#0  findAndReturnMax (array1=0xbfd043ec, len=5, max=60) at badprog.c:27
+#1  0x08048479 in main () at badprog.c:40
+
+<b> frame 1</b>                         <b>#-- move into main's calling context (stack frame 1) to examine main's state</b>
+#1  0x08048479 in main () at badprog.c:40
+40        if ( findAndReturnMax(arr, 5, max) != 0 ) {
+
+<b>(gdb) print max</b>                  <b>#-- in main's stack frame max is 17</b>
+$1 = 17
+
+
+<b>(gdb) cont</b>                       <b>#-- continue execution</b>
+Continuing.
+max value in the array is 17            <b>#-- main prints out value of max after function call</b> 
+
+<b>#-- This looks like a bug:"</b> 
+<b>#-- findAndReturnMax set max to 60, but 60 isn't getting "passed back" to main after the call</b> 
+<b>#-- to fix this we need either have findAndReturnMax return the value of max or pass max by reference</b>
+
+
+<b>(gdb) quit</b>                      <b>#-- quit gdb</b>
+
+The program is running.  Exit anyway? (y or n) y
+</pre>
+<hr>
+<a name="segfaulter">
+	<h3>Run 2: segfaulter.c</h3>
+<pre>
+
+ <b> % gdb segfaulter</b>
+
+ GNU gdb 6.4.90-debian
+ Copyright (C) 2006 Free Software Foundation, Inc.
+ GDB is free software, covered by the GNU General Public License, and you are
+ welcome to change it and/or distribute copies of it under certain conditions.
+ Type "show copying" to see the conditions.
+ There is absolutely no warranty for GDB.  Type "show warranty" for details.
+ This GDB was configured as "i486-linux-gnu"...Using host libthread_db library "/lib/tls/libthread_db.so.1".
+
+ <b> (gdb) run              #-- just run segfaulter and let it seg fault</b>
+
+ Starting program: /home/newhall/public/gdb_examples/segfaulter 
+ Failed to read a valid object file image from memory.
+
+ Program received signal SIGSEGV, Segmentation fault.
+ 0x080483e1 in initfunc (array=0x0, len=100) at segfaulter.c:15
+ 15          array[i] = i;
+
+ <b> (gdb) where           #---  let's see where it segfaulted</b>
+
+ #0  0x080483e1 in initfunc (array=0x0, len=100) at segfaulter.c:15
+ #1  0x0804846e in main () at segfaulter.c:38
+
+ <b>(gdb) list             #--- let's see code around segfaulting instruction</b> 
+
+ 10      int initfunc(int *array, int len) {
+ 11
+ 12        int i;
+ 13
+ 14        for(i=1; i <= len; i++) {
+ 15          array[i] = i;
+ 16        }
+ 17        return 0;
+ 18      }
+ 19
+
+ <b> (gdb) p array[0]          #--- let's print out some values and see what's going on</b>
+ Cannot access memory at address 0x0
+
+ <b>#-- it looks like array is a bad address (0x0 is NULL)</b>
+
+ <b> (gdb) p array</b>
+ $1 = (int *) 0x0
+
+ <b> (gdb) frame 1             #--- let's see what main is passing to this funtion</b>
+
+ #1  0x0804846e in main () at segfaulter.c:38
+ 38        if(initfunc(arr, 100) != 0 ) {
+
+ <b> (gdb) print arr           #--- print out arr's value (what we pass to initfunc)</b> 
+ $2 = (int *) 0x0
+ <b>#--- oops, we are passing NULL to initfunc...we forgot to initialize arr to point to valid memory</b>
+
+
+</pre>
+
+</body>
+</html>
