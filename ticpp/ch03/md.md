@@ -101,3 +101,4 @@ In general, void pointers should be avoided, and used only in rare special cases
 If the existence of a global variable in one file is declared using the extern keyword in another file, the data is available for use by the second file. 
 
 
+static specifier

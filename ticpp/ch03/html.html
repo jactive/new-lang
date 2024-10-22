@@ -1721,17 +1721,17 @@ static</H3></FONT>
 <A NAME="Index630"></A><A NAME="Index631"></A><B>static</B> keyword has several
 distinct meanings. Normally, variables defined local to a function disappear at
 the end of the function scope. When you call the function again, storage for the
-variables is created anew and the values are re-initialized. If you want a value
-to be extant throughout the life of a program, you can define a function&#8217;s
-local variable to be <B>static</B> and give it an initial value. The
+variables is created anew and the values are re-initialized. <span class=myhl>If you want a value
+ to be extant throughout the life of a program, you can define a function&#8217;s
+ local variable to be <B>static</B> and give it an initial value. The
 initialization is performed only the first time the function is called, and the
-data retains its value between function calls. This way, a function can
+data retains its value between function calls.</span> This way, a function can
 &#8220;remember&#8221; some piece of information between function
 calls.</FONT><BR></P></DIV>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">You may wonder why a global variable
-isn&#8217;t used instead. The beauty of a <B>static</B> variable is that it is
+      isn&#8217;t used instead. <span class=myhl> The beauty of a <B>static</B> variable is that it is
 unavailable outside the scope of the function, so it can&#8217;t be
-inadvertently changed. This localizes errors.</FONT><BR></P></DIV>
+inadvertently changed. </span>This localizes errors.</FONT><BR></P></DIV>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">Here&#8217;s an example of the use of
 <B>static</B> variables:</FONT><BR></P></DIV>
 
@@ -1775,10 +1775,10 @@ linker error:</FONT><BR></P></DIV>
   fs = 1;
 } <font color=#009900>///:~</font></PRE></FONT></BLOCKQUOTE>
 
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">Even though the variable <B>fs</B> is
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia"><span class=myhl>Even though the variable <B>fs</B> is
 claimed to exist as an <B>extern<A NAME="Index635"></A></B> in the following
 file, the linker won&#8217;t find it because it has been declared <B>static</B>
-in <B>FileStatic.cpp</B>.</FONT><BR></P></DIV>
+in <B>FileStatic.cpp</B>.</FONT></span><BR></P></DIV>
 
 <BLOCKQUOTE><FONT SIZE = "+1"><PRE><font color=#009900>//: C03:FileStatic2.cpp {O}</font>
 <font color=#009900>// Trying to reference fs</font>
@@ -1795,10 +1795,10 @@ book.</FONT><A NAME="_Toc462979767"></A><A NAME="_Toc472654773"></A><BR></P></DI
 extern</H3></FONT>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">The
 <A NAME="Index636"></A><A NAME="Index637"></A><B>extern</B> keyword has already
-been briefly described and demonstrated. It tells the compiler that a variable
+been briefly described and demonstrated. <span class=myhl>It tells the compiler that a variable
 or a function exists, even if the compiler hasn&#8217;t yet seen it in the file
 currently being compiled. This variable or function may be defined in another
-file or further down in the current file. As an example of the
+file or further down in the current file. </span>As an example of the
 latter:<A NAME="Index638"></A><A NAME="Index639"></A></FONT><BR></P></DIV>
 
 <BLOCKQUOTE><FONT SIZE = "+1"><PRE><font color=#009900>//: C03:Forward.cpp</font>
@@ -1823,9 +1823,10 @@ latter:<A NAME="Index638"></A><A NAME="Index639"></A></FONT><BR></P></DIV>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">When the compiler encounters the
 declaration &#8216;<B>extern int i</B>&#8217;, it knows that the definition for
 <B>i</B> must exist somewhere as a global variable. When the compiler reaches
-the definition of <B>i</B>, no other declaration is visible, so it knows it has
+the definition of <B>i</B> (around <font color=#0000ff>int</font> i; <font color=#009900>// The data definition</font>), no other declaration is visible, so it knows it has
 found the same <B>i</B> declared earlier in the file. If you were to define
-<B>i</B> as <B>static</B>, you would be telling the compiler that <B>i</B> is
+<B>i</B> as <B>static</B> (around <font color=#0000ff>int</font> i; <font color=#009900>// The data definition</font>
+), you would be telling the compiler that <B>i</B> is
 defined globally (via the <B>extern</B>), but it also has file
 scope<A NAME="Index640"></A> (via the <B>static</B>), so the compiler will
 generate an error.</FONT><BR></P></DIV>
