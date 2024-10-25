@@ -1831,37 +1831,45 @@ defined globally (via the <B>extern</B>), but it also has file
 scope<A NAME="Index640"></A> (via the <B>static</B>), so the compiler will
 generate an error.</FONT><BR></P></DIV>
 <A NAME="Heading133"></A><FONT FACE = "Verdana"><H4 ALIGN="LEFT">
+
 Linkage<A NAME="Index641"></A></H4></FONT>
+
+<pre>
+      A linker is a software tool that combines object code, libraries, and modules to create an executable file.
+
+      Linkage is the association of an identifier with a specific object or function.
+</pre>
+
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">To understand the behavior of C and C++
-programs, you need to know about <I>linkage</I>. In an executing program, an
+programs, you need to know about <I>linkage</I>. In an executing program, <span class=myhl>an
 identifier is represented by storage in memory that holds a variable or a
-compiled function body. Linkage describes this storage as it is seen by the
+compiled function body</span>. Linkage describes this storage as it is seen by the
 linker. There are two types of linkage: <I>internal
 linkage<A NAME="Index642"></A></I> and <I>external
 linkage<A NAME="Index643"></A></I>.</FONT><BR></P></DIV>
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">Internal linkage means that storage is
-created to represent the identifier only for the file being compiled. Other
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia"><span class=myhl>Internal linkage means that storage is
+created to represent the identifier only for the file being compiled. </span>Other
 files may use the same identifier name with internal linkage, or for a global
 variable, and no conflicts will be found by the linker &#8211; separate storage
 is created for each identifier. Internal linkage is specified by the keyword
 <B>static</B> in C and C++.</FONT><BR></P></DIV>
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">External linkage means that a single
-piece of storage is created to represent the identifier for all files being
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">External linkage means that <span class=myhl>a single
+piece of</span> storage is created to represent the identifier for all files being
 compiled. The storage is created once, and the linker must resolve all other
-references to that storage. Global variables and function names have external
-linkage. These are accessed from other files by declaring them with the keyword
-<B>extern</B>. Variables defined outside all functions (with the exception of
-<B>const</B> in C++) and function definitions default to external linkage. You
+references to that storage. <span class=myhl>Global variables and function names have external
+   linkage.</span> These are accessed from other files by declaring them with the keyword
+<B>extern</B>. <span class=myhl>Variables defined outside all functions (with the exception of
+<B>const</B> in C++) and function definitions default to external linkage.</span> You
 can specifically force them to have internal linkage using the <B>static</B>
 keyword. You can explicitly state that an identifier has external linkage by
 defining it with the <B>extern</B> keyword. Defining a variable or function with
 <B>extern</B> is not necessary in C, but it is sometimes necessary for
 <B>const</B> in C++.</FONT><BR></P></DIV>
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">Automatic (local) variables exist only
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia"><span class=myhl>Automatic (local) variables exist only
 temporarily, on the stack, while a function is being called. The linker
 doesn&#8217;t know about automatic
 variables<A NAME="Index644"></A><A NAME="Index645"></A>, and so these have <I>no
-linkage<A NAME="Index646"></A><A NAME="Index647"></A></I>.</FONT><A NAME="_Toc462979768"></A><A NAME="_Toc472654774"></A><BR></P></DIV>
+linkage<A NAME="Index646"></A><A NAME="Index647"></A></I></span>.</FONT><A NAME="_Toc462979768"></A><A NAME="_Toc472654774"></A><BR></P></DIV>
 <A NAME="Heading134"></A><FONT FACE = "Verdana"><H3 ALIGN="LEFT">
 Constants<BR><A NAME="Index648"></A></H3></FONT>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">In old (pre-Standard) C, if you wanted to
@@ -1886,7 +1894,7 @@ variable, except that its value cannot be changed. The modifier
 <A NAME="Index655"></A><B>const<A NAME="Index656"></A></B> tells the compiler
 that a name represents a constant. Any data type, built-in or user-defined, may
 be defined as <B>const</B>. If you define something as <B>const</B> and then
-attempt to modify it, the compiler will generate an error.</FONT><BR></P></DIV>
+attempt to modify it, the <span class=myhl>compiler</span> will generate an error.</FONT><BR></P></DIV>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">You must specify the type of a
 <B>const</B>, like this:</FONT><BR></P></DIV>
 <BLOCKQUOTE><FONT SIZE = "+1"><PRE><font color=#0000ff>const</font> <font color=#0000ff>int</font> x = 10;</PRE></FONT></BLOCKQUOTE>
@@ -1917,12 +1925,12 @@ considered important), or as characters<A NAME="Index663"></A>.</FONT><BR></P></
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">In the absence of any other clues, the
 compiler assumes a constant value is a decimal number. The numbers 47, 0, and
 1101 are all treated as decimal numbers.</FONT><BR></P></DIV>
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">A constant value with a leading 0 is
-treated as an octal number (base 8). Base 8 numbers can contain only digits 0-7;
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">A constant value with <span class=myhl>a leading 0 is
+treated as an octal number (base 8)</span>. Base 8 numbers can contain only digits 0-7;
 the compiler flags other digits as an error. A legitimate octal number is 017
 (15 in base 10).</FONT><BR></P></DIV>
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">A constant value with a leading 0x is
-treated as a hexadecimal number (base 16). Base 16 numbers contain the digits
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">A constant value with <span class=myhl>a leading 0x is
+treated as a hexadecimal number (base 16)</span>. Base 16 numbers contain the digits
 0-9 and a-f or A-F. A legitimate hexadecimal number is 0x1fe (510 in base
 10).</FONT><BR></P></DIV>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">Floating point numbers can contain
