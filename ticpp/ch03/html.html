@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <!--
-This document was converted from RTF source: 
+This document was converted from RTF source:
 By rtftohtml 4.19
 See http://www.sunpack.com/RTF
 Filename:TIC2Vone.rtf
@@ -29,7 +29,7 @@ GenIndex=1
 <HEAD lang="en"><META http-equiv="Content-Type" content="text/html">
 <TITLE>3: The C in C++</TITLE>
 <style type="text/css">
-.myhl {
+hw {
    background: yellow
 }
 </style>
@@ -51,14 +51,14 @@ GenIndex=1
   <H2><FONT FACE="Verdana">
   Thinking in C++, 2nd ed. Volume 1</FONT></H2></FONT>
   <H3><FONT FACE="Verdana">&copy;2000 by Bruce Eckel</FONT></H3></FONT>
-  
+
     <FONT FACE="Verdana" size = "-1">
-     [ <a href="Chapter02.html">Previous Chapter</a> ] 
-    [ <a href="Contents.html">Table of Contents</a> ] 
+     [ <a href="Chapter02.html">Previous Chapter</a> ]
+    [ <a href="Contents.html">Table of Contents</a> ]
     [ <a href="DocIndex.html">Index</a> ]
-     [ <a href="Chapter04.html">Next Chapter</a> ] 
+     [ <a href="Chapter04.html">Next Chapter</a> ]
     </FONT>
-    
+
   </CENTER>
   </P></DIV><A NAME="_Toc472654741"></A><FONT FACE = "Verdana"><H1 ALIGN="LEFT">
 3: The C in C++</H1></FONT>
@@ -474,8 +474,8 @@ of each loop, the <I>step</I> executes.</FONT><BR></P></DIV>
 <font color=#0000ff>int</font> main() {
   <font color=#0000ff>for</font>(<font color=#0000ff>int</font> i = 0; i &lt; 128; i = i + 1)
     <font color=#0000ff>if</font> (i != 26)  <font color=#009900>// ANSI Terminal Clear screen</font>
-      cout &lt;&lt; <font color=#004488>" value: "</font> &lt;&lt; i 
-           &lt;&lt; <font color=#004488>" character: "</font> 
+      cout &lt;&lt; <font color=#004488>" value: "</font> &lt;&lt; i
+           &lt;&lt; <font color=#004488>" character: "</font>
            &lt;&lt; <font color=#0000ff>char</font>(i) <font color=#009900>// Type conversion</font>
            &lt;&lt; endl;
 } <font color=#009900>///:~</font></PRE></FONT></BLOCKQUOTE>
@@ -545,7 +545,7 @@ begin a new iteration.</FONT><BR></P></DIV>
         <font color=#0000ff>continue</font>; <font color=#009900>// Back to main menu</font>
       }
       <font color=#0000ff>else</font> {
-        cout &lt;&lt; <font color=#004488>"you didn't choose c or d!"</font> 
+        cout &lt;&lt; <font color=#004488>"you didn't choose c or d!"</font>
              &lt;&lt; endl;
         <font color=#0000ff>continue</font>; <font color=#009900>// Back to main menu</font>
       }
@@ -665,7 +665,7 @@ make a plausible candidate:</FONT><BR></P></DIV>
     <font color=#0000ff>for</font>(<font color=#0000ff>int</font> j = 1; j &lt; 100; j += 10) {
       val = i * j;
       <font color=#0000ff>if</font>(val &gt; 47000)
-        <font color=#0000ff>goto</font> bottom; 
+        <font color=#0000ff>goto</font> bottom;
         <font color=#009900>// Break would only go to the outer 'for'</font>
     }
   }
@@ -857,11 +857,11 @@ types:</FONT><BR></P></DIV>
   <font color=#0000ff>double</font> fat;
   <font color=#009900>// Simultaneous definition &amp; initialization:</font>
   <font color=#0000ff>char</font> pizza = 'A', pop = 'Z';
-  <font color=#0000ff>int</font> dongdings = 100, twinkles = 150, 
+  <font color=#0000ff>int</font> dongdings = 100, twinkles = 150,
     heehos = 200;
   <font color=#0000ff>float</font> chocolate = 3.14159;
   <font color=#009900>// Exponential notation:</font>
-  <font color=#0000ff>double</font> fudge_ripple = 6e-4; 
+  <font color=#0000ff>double</font> fudge_ripple = 6e-4;
 } <font color=#009900>///:~</font></PRE></FONT></BLOCKQUOTE>
 
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">The first part of the program defines
@@ -897,7 +897,7 @@ adapted<A NAME="Index540"></A>:</FONT><BR></P></DIV>
 </TR>
 <TR VALIGN="TOP">
 <TD WIDTH=81 COLSPAN=1 ROWSPAN=1 VALIGN="TOP">
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia"><B>&amp;&amp;   ||  
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia"><B>&amp;&amp;   ||
 !</B></FONT><BR></P></DIV>
 </TD>
 <TD WIDTH=180 COLSPAN=1 ROWSPAN=1 VALIGN="TOP">
@@ -907,7 +907,7 @@ adapted<A NAME="Index540"></A>:</FONT><BR></P></DIV>
 </TR>
 <TR VALIGN="TOP">
 <TD WIDTH=81 COLSPAN=1 ROWSPAN=1 VALIGN="MIDDLE">
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia"><B>&lt;   &gt;   &lt;=  &gt;=  ==  
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia"><B>&lt;   &gt;   &lt;=  &gt;=  ==
 !=</B></FONT><BR></P></DIV>
 </TD>
 <TD WIDTH=180 COLSPAN=1 ROWSPAN=1 VALIGN="MIDDLE">
@@ -1008,18 +1008,18 @@ later in this chapter:</FONT><BR></P></DIV>
   <font color=#0000ff>float</font> f;
   <font color=#0000ff>double</font> d;
   <font color=#0000ff>long</font> <font color=#0000ff>double</font> ld;
-  cout 
+  cout
     &lt;&lt; <font color=#004488>"\n char= "</font> &lt;&lt; <font color=#0000ff>sizeof</font>(c)
     &lt;&lt; <font color=#004488>"\n unsigned char = "</font> &lt;&lt; <font color=#0000ff>sizeof</font>(cu)
     &lt;&lt; <font color=#004488>"\n int = "</font> &lt;&lt; <font color=#0000ff>sizeof</font>(i)
     &lt;&lt; <font color=#004488>"\n unsigned int = "</font> &lt;&lt; <font color=#0000ff>sizeof</font>(iu)
     &lt;&lt; <font color=#004488>"\n short = "</font> &lt;&lt; <font color=#0000ff>sizeof</font>(is)
     &lt;&lt; <font color=#004488>"\n unsigned short = "</font> &lt;&lt; <font color=#0000ff>sizeof</font>(isu)
-    &lt;&lt; <font color=#004488>"\n long = "</font> &lt;&lt; <font color=#0000ff>sizeof</font>(il) 
+    &lt;&lt; <font color=#004488>"\n long = "</font> &lt;&lt; <font color=#0000ff>sizeof</font>(il)
     &lt;&lt; <font color=#004488>"\n unsigned long = "</font> &lt;&lt; <font color=#0000ff>sizeof</font>(ilu)
     &lt;&lt; <font color=#004488>"\n float = "</font> &lt;&lt; <font color=#0000ff>sizeof</font>(f)
     &lt;&lt; <font color=#004488>"\n double = "</font> &lt;&lt; <font color=#0000ff>sizeof</font>(d)
-    &lt;&lt; <font color=#004488>"\n long double = "</font> &lt;&lt; <font color=#0000ff>sizeof</font>(ld) 
+    &lt;&lt; <font color=#004488>"\n long double = "</font> &lt;&lt; <font color=#0000ff>sizeof</font>(ld)
     &lt;&lt; endl;
 } <font color=#009900>///:~</font></PRE></FONT></BLOCKQUOTE>
 
@@ -1393,19 +1393,19 @@ tripled:</FONT><BR></P></DIV>
 
 <font color=#0000ff>void</font> f1(<font color=#0000ff>char</font> c, <font color=#0000ff>int</font> i, <font color=#0000ff>float</font> f, <font color=#0000ff>double</font> d);
 <font color=#0000ff>void</font> f2(<font color=#0000ff>short</font> <font color=#0000ff>int</font> si, <font color=#0000ff>long</font> <font color=#0000ff>int</font> li, <font color=#0000ff>long</font> <font color=#0000ff>double</font> ld);
-<font color=#0000ff>void</font> f3(<font color=#0000ff>unsigned</font> <font color=#0000ff>char</font> uc, <font color=#0000ff>unsigned</font> <font color=#0000ff>int</font> ui, 
+<font color=#0000ff>void</font> f3(<font color=#0000ff>unsigned</font> <font color=#0000ff>char</font> uc, <font color=#0000ff>unsigned</font> <font color=#0000ff>int</font> ui,
   <font color=#0000ff>unsigned</font> <font color=#0000ff>short</font> <font color=#0000ff>int</font> usi, <font color=#0000ff>unsigned</font> <font color=#0000ff>long</font> <font color=#0000ff>int</font> uli);
 <font color=#0000ff>void</font> f4(<font color=#0000ff>char</font>* cp, <font color=#0000ff>int</font>* ip, <font color=#0000ff>float</font>* fp, <font color=#0000ff>double</font>* dp);
-<font color=#0000ff>void</font> f5(<font color=#0000ff>short</font> <font color=#0000ff>int</font>* sip, <font color=#0000ff>long</font> <font color=#0000ff>int</font>* lip, 
+<font color=#0000ff>void</font> f5(<font color=#0000ff>short</font> <font color=#0000ff>int</font>* sip, <font color=#0000ff>long</font> <font color=#0000ff>int</font>* lip,
   <font color=#0000ff>long</font> <font color=#0000ff>double</font>* ldp);
-<font color=#0000ff>void</font> f6(<font color=#0000ff>unsigned</font> <font color=#0000ff>char</font>* ucp, <font color=#0000ff>unsigned</font> <font color=#0000ff>int</font>* uip, 
-  <font color=#0000ff>unsigned</font> <font color=#0000ff>short</font> <font color=#0000ff>int</font>* usip, 
+<font color=#0000ff>void</font> f6(<font color=#0000ff>unsigned</font> <font color=#0000ff>char</font>* ucp, <font color=#0000ff>unsigned</font> <font color=#0000ff>int</font>* uip,
+  <font color=#0000ff>unsigned</font> <font color=#0000ff>short</font> <font color=#0000ff>int</font>* usip,
   <font color=#0000ff>unsigned</font> <font color=#0000ff>long</font> <font color=#0000ff>int</font>* ulip);
 <font color=#0000ff>void</font> f7(<font color=#0000ff>char</font>&amp; cr, <font color=#0000ff>int</font>&amp; ir, <font color=#0000ff>float</font>&amp; fr, <font color=#0000ff>double</font>&amp; dr);
-<font color=#0000ff>void</font> f8(<font color=#0000ff>short</font> <font color=#0000ff>int</font>&amp; sir, <font color=#0000ff>long</font> <font color=#0000ff>int</font>&amp; lir, 
+<font color=#0000ff>void</font> f8(<font color=#0000ff>short</font> <font color=#0000ff>int</font>&amp; sir, <font color=#0000ff>long</font> <font color=#0000ff>int</font>&amp; lir,
   <font color=#0000ff>long</font> <font color=#0000ff>double</font>&amp; ldr);
-<font color=#0000ff>void</font> f9(<font color=#0000ff>unsigned</font> <font color=#0000ff>char</font>&amp; ucr, <font color=#0000ff>unsigned</font> <font color=#0000ff>int</font>&amp; uir, 
-  <font color=#0000ff>unsigned</font> <font color=#0000ff>short</font> <font color=#0000ff>int</font>&amp; usir, 
+<font color=#0000ff>void</font> f9(<font color=#0000ff>unsigned</font> <font color=#0000ff>char</font>&amp; ucr, <font color=#0000ff>unsigned</font> <font color=#0000ff>int</font>&amp; uir,
+  <font color=#0000ff>unsigned</font> <font color=#0000ff>short</font> <font color=#0000ff>int</font>&amp; usir,
   <font color=#0000ff>unsigned</font> <font color=#0000ff>long</font> <font color=#0000ff>int</font>&amp; ulir);
 
 <font color=#0000ff>int</font> main() {} <font color=#009900>///:~</font></PRE></FONT></BLOCKQUOTE>
@@ -1561,10 +1561,10 @@ on-the-fly variable definitions:</FONT><BR></P></DIV>
     <font color=#0000ff>int</font> q = 0; <font color=#009900>// C requires definitions here</font>
     <font color=#009900>//..</font>
     <font color=#009900>// Define at point of use:</font>
-    <font color=#0000ff>for</font>(<font color=#0000ff>int</font> i = 0; i &lt; 100; i++) { 
+    <font color=#0000ff>for</font>(<font color=#0000ff>int</font> i = 0; i &lt; 100; i++) {
       q++; <font color=#009900>// q comes from a larger scope</font>
       <font color=#009900>// Definition at the end of the scope:</font>
-      <font color=#0000ff>int</font> p = 12; 
+      <font color=#0000ff>int</font> p = 12;
     }
     <font color=#0000ff>int</font> p = 1;  <font color=#009900>// A different p</font>
   } <font color=#009900>// End scope containing q &amp; outer p</font>
@@ -1628,10 +1628,10 @@ Global variables<BR><A NAME="Index615"></A><A NAME="Index616"></A></H3></FONT>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">Global variables are defined outside all
 function bodies and are available to all parts of the program (even code in
 other files). Global variables are unaffected by scopes and are always available
-(i.e., the lifetime of a global variable lasts until the program ends). <span class=myhl>If the
+(i.e., the lifetime of a global variable lasts until the program ends). <hw>If the
 existence of a global variable in one file is declared using the
 <A NAME="Index617"></A><A NAME="Index618"></A><B>extern</B> keyword in another
-file, the data is available for use by the second file.</span> Here&#8217;s an example
+file, the data is available for use by the second file.</hw> Here&#8217;s an example
 of the use of global variables:</FONT><BR></P></DIV>
 
 <BLOCKQUOTE><FONT SIZE = "+1"><PRE><font color=#009900>//: C03:Global.cpp</font>
@@ -1654,7 +1654,7 @@ of the use of global variables:</FONT><BR></P></DIV>
 
 <BLOCKQUOTE><FONT SIZE = "+1"><PRE><font color=#009900>//: C03:Global2.cpp {O}</font>
 <font color=#009900>// Accessing external global variables</font>
-<font color=#0000ff>extern</font> <font color=#0000ff>int</font> globe;  
+<font color=#0000ff>extern</font> <font color=#0000ff>int</font> globe;
 <font color=#009900>// (The linker resolves the reference)</font>
 <font color=#0000ff>void</font> func() {
   globe = 47;
@@ -1721,17 +1721,17 @@ static</H3></FONT>
 <A NAME="Index630"></A><A NAME="Index631"></A><B>static</B> keyword has several
 distinct meanings. Normally, variables defined local to a function disappear at
 the end of the function scope. When you call the function again, storage for the
-variables is created anew and the values are re-initialized. <span class=myhl>If you want a value
+variables is created anew and the values are re-initialized. <hw>If you want a value
  to be extant throughout the life of a program, you can define a function&#8217;s
  local variable to be <B>static</B> and give it an initial value. The
 initialization is performed only the first time the function is called, and the
-data retains its value between function calls.</span> This way, a function can
+data retains its value between function calls.</hw> This way, a function can
 &#8220;remember&#8221; some piece of information between function
 calls.</FONT><BR></P></DIV>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">You may wonder why a global variable
-      isn&#8217;t used instead. <span class=myhl> The beauty of a <B>static</B> variable is that it is
+      isn&#8217;t used instead. <hw> The beauty of a <B>static</B> variable is that it is
 unavailable outside the scope of the function, so it can&#8217;t be
-inadvertently changed. </span>This localizes errors.</FONT><BR></P></DIV>
+inadvertently changed. </hw>This localizes errors.</FONT><BR></P></DIV>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">Here&#8217;s an example of the use of
 <B>static</B> variables:</FONT><BR></P></DIV>
 
@@ -1769,16 +1769,16 @@ linker error:</FONT><BR></P></DIV>
 <font color=#009900>// will cause a linker error</font>
 
 <font color=#009900>// File scope means only available in this file:</font>
-<font color=#0000ff>static</font> <font color=#0000ff>int</font> fs; 
+<font color=#0000ff>static</font> <font color=#0000ff>int</font> fs;
 
 <font color=#0000ff>int</font> main() {
   fs = 1;
 } <font color=#009900>///:~</font></PRE></FONT></BLOCKQUOTE>
 
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia"><span class=myhl>Even though the variable <B>fs</B> is
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia"><hw>Even though the variable <B>fs</B> is
 claimed to exist as an <B>extern<A NAME="Index635"></A></B> in the following
 file, the linker won&#8217;t find it because it has been declared <B>static</B>
-in <B>FileStatic.cpp</B>.</FONT></span><BR></P></DIV>
+in <B>FileStatic.cpp</B>.</FONT></hw><BR></P></DIV>
 
 <BLOCKQUOTE><FONT SIZE = "+1"><PRE><font color=#009900>//: C03:FileStatic2.cpp {O}</font>
 <font color=#009900>// Trying to reference fs</font>
@@ -1795,10 +1795,10 @@ book.</FONT><A NAME="_Toc462979767"></A><A NAME="_Toc472654773"></A><BR></P></DI
 extern</H3></FONT>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">The
 <A NAME="Index636"></A><A NAME="Index637"></A><B>extern</B> keyword has already
-been briefly described and demonstrated. <span class=myhl>It tells the compiler that a variable
+been briefly described and demonstrated. <hw>It tells the compiler that a variable
 or a function exists, even if the compiler hasn&#8217;t yet seen it in the file
 currently being compiled. This variable or function may be defined in another
-file or further down in the current file. </span>As an example of the
+file or further down in the current file. </hw>As an example of the
 latter:<A NAME="Index638"></A><A NAME="Index639"></A></FONT><BR></P></DIV>
 
 <BLOCKQUOTE><FONT SIZE = "+1"><PRE><font color=#009900>//: C03:Forward.cpp</font>
@@ -1808,7 +1808,7 @@ latter:<A NAME="Index638"></A><A NAME="Index639"></A></FONT><BR></P></DIV>
 
 <font color=#009900>// This is not actually external, but the </font>
 <font color=#009900>// compiler must be told it exists somewhere:</font>
-<font color=#0000ff>extern</font> <font color=#0000ff>int</font> i; 
+<font color=#0000ff>extern</font> <font color=#0000ff>int</font> i;
 <font color=#0000ff>extern</font> <font color=#0000ff>void</font> func();
 <font color=#0000ff>int</font> main() {
   i = 0;
@@ -1831,37 +1831,45 @@ defined globally (via the <B>extern</B>), but it also has file
 scope<A NAME="Index640"></A> (via the <B>static</B>), so the compiler will
 generate an error.</FONT><BR></P></DIV>
 <A NAME="Heading133"></A><FONT FACE = "Verdana"><H4 ALIGN="LEFT">
+
 Linkage<A NAME="Index641"></A></H4></FONT>
+
+<pre>
+      A linker is a software tool that combines object code, libraries, and modules to create an executable file.
+
+      Linkage is the association of an identifier with a specific object or function.
+</pre>
+
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">To understand the behavior of C and C++
-programs, you need to know about <I>linkage</I>. In an executing program, an
+programs, you need to know about <I>linkage</I>. In an executing program, <hw>an
 identifier is represented by storage in memory that holds a variable or a
-compiled function body. Linkage describes this storage as it is seen by the
+compiled function body</hw>. Linkage describes this storage as it is seen by the
 linker. There are two types of linkage: <I>internal
 linkage<A NAME="Index642"></A></I> and <I>external
 linkage<A NAME="Index643"></A></I>.</FONT><BR></P></DIV>
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">Internal linkage means that storage is
-created to represent the identifier only for the file being compiled. Other
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia"><hw>Internal linkage means that storage is
+created to represent the identifier only for the file being compiled. </hw>Other
 files may use the same identifier name with internal linkage, or for a global
 variable, and no conflicts will be found by the linker &#8211; separate storage
 is created for each identifier. Internal linkage is specified by the keyword
 <B>static</B> in C and C++.</FONT><BR></P></DIV>
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">External linkage means that a single
-piece of storage is created to represent the identifier for all files being
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">External linkage means that <hw>a single
+piece of</hw> storage is created to represent the identifier for all files being
 compiled. The storage is created once, and the linker must resolve all other
-references to that storage. Global variables and function names have external
-linkage. These are accessed from other files by declaring them with the keyword
-<B>extern</B>. Variables defined outside all functions (with the exception of
-<B>const</B> in C++) and function definitions default to external linkage. You
+references to that storage. <hw>Global variables and function names have external
+   linkage.</hw> These are accessed from other files by declaring them with the keyword
+<B>extern</B>. <hw>Variables defined outside all functions (with the exception of
+<B>const</B> in C++) and function definitions default to external linkage.</hw> You
 can specifically force them to have internal linkage using the <B>static</B>
 keyword. You can explicitly state that an identifier has external linkage by
 defining it with the <B>extern</B> keyword. Defining a variable or function with
 <B>extern</B> is not necessary in C, but it is sometimes necessary for
 <B>const</B> in C++.</FONT><BR></P></DIV>
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">Automatic (local) variables exist only
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia"><hw>Automatic (local) variables exist only
 temporarily, on the stack, while a function is being called. The linker
 doesn&#8217;t know about automatic
 variables<A NAME="Index644"></A><A NAME="Index645"></A>, and so these have <I>no
-linkage<A NAME="Index646"></A><A NAME="Index647"></A></I>.</FONT><A NAME="_Toc462979768"></A><A NAME="_Toc472654774"></A><BR></P></DIV>
+linkage<A NAME="Index646"></A><A NAME="Index647"></A></I></hw>.</FONT><A NAME="_Toc462979768"></A><A NAME="_Toc472654774"></A><BR></P></DIV>
 <A NAME="Heading134"></A><FONT FACE = "Verdana"><H3 ALIGN="LEFT">
 Constants<BR><A NAME="Index648"></A></H3></FONT>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">In old (pre-Standard) C, if you wanted to
@@ -1886,7 +1894,7 @@ variable, except that its value cannot be changed. The modifier
 <A NAME="Index655"></A><B>const<A NAME="Index656"></A></B> tells the compiler
 that a name represents a constant. Any data type, built-in or user-defined, may
 be defined as <B>const</B>. If you define something as <B>const</B> and then
-attempt to modify it, the compiler will generate an error.</FONT><BR></P></DIV>
+attempt to modify it, the <hw>compiler</hw> will generate an error.</FONT><BR></P></DIV>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">You must specify the type of a
 <B>const</B>, like this:</FONT><BR></P></DIV>
 <BLOCKQUOTE><FONT SIZE = "+1"><PRE><font color=#0000ff>const</font> <font color=#0000ff>int</font> x = 10;</PRE></FONT></BLOCKQUOTE>
@@ -1917,12 +1925,12 @@ considered important), or as characters<A NAME="Index663"></A>.</FONT><BR></P></
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">In the absence of any other clues, the
 compiler assumes a constant value is a decimal number. The numbers 47, 0, and
 1101 are all treated as decimal numbers.</FONT><BR></P></DIV>
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">A constant value with a leading 0 is
-treated as an octal number (base 8). Base 8 numbers can contain only digits 0-7;
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">A constant value with <hw>a leading 0 is
+treated as an octal number (base 8)</hw>. Base 8 numbers can contain only digits 0-7;
 the compiler flags other digits as an error. A legitimate octal number is 017
 (15 in base 10).</FONT><BR></P></DIV>
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">A constant value with a leading 0x is
-treated as a hexadecimal number (base 16). Base 16 numbers contain the digits
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">A constant value with <hw>a leading 0x is
+treated as a hexadecimal number (base 16)</hw>. Base 16 numbers contain the digits
 0-9 and a-f or A-F. A legitimate hexadecimal number is 0x1fe (510 in base
 10).</FONT><BR></P></DIV>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">Floating point numbers can contain
@@ -1961,15 +1969,15 @@ perform extra optimizations), the qualifier
 when this will change,&#8221; and prevents the compiler from performing any
 optimizations based on the stability of that variable. Use this keyword when you
 read some value outside the control of your code, such as a register in a piece
-of communication hardware. A <B>volatile</B> variable is always read whenever
+of communication hardware. <hw>A <B>volatile</B> variable is always read whenever
 its value is required, even if it was just read the line
-before.</FONT><BR></P></DIV>
+before.</hw></FONT><BR></P></DIV>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">A special case of some storage being
 &#8220;outside the control of your code&#8221; is in a multithreaded program. If
 you&#8217;re watching a particular flag that is modified by another thread or
-process, that flag should be <B>volatile</B> so the compiler doesn&#8217;t make
+process, that flag should be <B>volatile</B> so <hw> /* if a variable is qualified with volatile */ the compiler doesn&#8217;t make
 the assumption that it can optimize away multiple reads of the
-flag.</FONT><BR></P></DIV>
+flag.</FONT></hw><BR></P></DIV>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">Note that <B>volatile</B> may have no
 effect when a compiler is not optimizing, but may prevent critical bugs when you
 start optimizing the code (which is when the compiler will begin looking for
@@ -2140,8 +2148,8 @@ logical operators:</FONT><BR></P></DIV>
 
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">You can replace the definition for
 <B>int</B> with <B>float</B> or <B>double</B> in the program above. Be aware,
-however, that the comparison of a floating-point number with the value of zero
-is strict; a number that is the tiniest fraction different from another number
+however, that <hw>the comparison of a floating-point number with the value of zero
+is strict</hw>; a number that is the tiniest fraction different from another number
 is still &#8220;not equal.&#8221; A floating-point number that is the tiniest
 bit above zero is still
 true.<A NAME="Index720"></A><A NAME="Index721"></A></FONT><A NAME="_Toc462979775"></A><A NAME="_Toc472654781"></A><BR></P></DIV>
@@ -2241,7 +2249,7 @@ example that shows the bit-manipulation operators:</FONT><BR></P></DIV>
 
 <font color=#009900>// A macro to save typing:</font>
 #define PR(STR, EXPR) \
-  cout &lt;&lt; STR; printBinary(EXPR); cout &lt;&lt; endl;  
+  cout &lt;&lt; STR; printBinary(EXPR); cout &lt;&lt; endl;
 
 <font color=#0000ff>int</font> main() {
   <font color=#0000ff>unsigned</font> <font color=#0000ff>int</font> getval;
@@ -2258,7 +2266,7 @@ example that shows the bit-manipulation operators:</FONT><BR></P></DIV>
   PR(<font color=#004488>"~a = "</font>, ~a);
   PR(<font color=#004488>"~b = "</font>, ~b);
   <font color=#009900>// An interesting bit pattern:</font>
-  <font color=#0000ff>unsigned</font> <font color=#0000ff>char</font> c = 0x5A; 
+  <font color=#0000ff>unsigned</font> <font color=#0000ff>char</font> c = 0x5A;
   PR(<font color=#004488>"c in binary: "</font>, c);
   a |= c;
   PR(<font color=#004488>"a |= c; a = "</font>, a);
@@ -2592,9 +2600,9 @@ static_cast<BR><A NAME="Index813"></A><A NAME="Index814"></A><A NAME="Index815">
 conversions that are well-defined. These include &#8220;safe&#8221; conversions
 that the compiler would allow you to do without a cast and less-safe conversions
 that are nonetheless well-defined. The types of conversions covered by
-<B>static_cast</B> include typical castless conversions, narrowing
-(information-losing) conversions, forcing a conversion from a <B>void*</B>,
-implicit type conversions, and static navigation of class hierarchies (since you
+<B>static_cast</B> include typical <hw>castless conversions</hw>, <hw>narrowing
+(information-losing) conversions</hw>, <hw>forcing a conversion from a <B>void*</B>,
+implicit type conversions</hw>, and <hw>static navigation of class hierarchies</hw> (since you
 haven&#8217;t seen classes and inheritance yet, this last topic will be delayed
 until Chapter 15):</FONT><BR></P></DIV>
 
@@ -3155,7 +3163,7 @@ delayed until much later in the book.</FONT><BR></P></DIV>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">If you don&#8217;t like the way the
 compiler assigns values, you can do it yourself, like this:</FONT><BR></P></DIV>
 
-<BLOCKQUOTE><FONT SIZE = "+1"><PRE><font color=#0000ff>enum</font> ShapeType { 
+<BLOCKQUOTE><FONT SIZE = "+1"><PRE><font color=#0000ff>enum</font> ShapeType {
   circle = 10, square = 20, rectangle = 50
 }; </PRE></FONT></BLOCKQUOTE>
 
@@ -3234,13 +3242,13 @@ it to use a different name).</FONT><BR></P></DIV>
   <font color=#0000ff>int</font> k;
   <font color=#0000ff>long</font> l;
   <font color=#0000ff>float</font> f;
-  <font color=#0000ff>double</font> d;  
+  <font color=#0000ff>double</font> d;
   <font color=#009900>// The union will be the size of a </font>
   <font color=#009900>// double, since that's the largest element</font>
 };  <font color=#009900>// Semicolon ends a union, like a struct</font>
 
 <font color=#0000ff>int</font> main() {
-  cout &lt;&lt; <font color=#004488>"sizeof(Packed) = "</font> 
+  cout &lt;&lt; <font color=#004488>"sizeof(Packed) = "</font>
        &lt;&lt; <font color=#0000ff>sizeof</font>(Packed) &lt;&lt; endl;
   Packed x;
   x.i = 'c';
@@ -3340,7 +3348,7 @@ this:</FONT><BR></P></DIV>
   <font color=#0000ff>int</font> a[10];
   cout &lt;&lt; <font color=#004488>"sizeof(int) = "</font>&lt;&lt; <font color=#0000ff>sizeof</font>(<font color=#0000ff>int</font>) &lt;&lt; endl;
   <font color=#0000ff>for</font>(<font color=#0000ff>int</font> i = 0; i &lt; 10; i++)
-    cout &lt;&lt; <font color=#004488>"&amp;a["</font> &lt;&lt; i &lt;&lt; <font color=#004488>"] = "</font> 
+    cout &lt;&lt; <font color=#004488>"&amp;a["</font> &lt;&lt; i &lt;&lt; <font color=#004488>"] = "</font>
          &lt;&lt; (<font color=#0000ff>long</font>)&amp;a[i] &lt;&lt; endl;
 } <font color=#009900>///:~</font></PRE></FONT></BLOCKQUOTE>
 
@@ -3408,7 +3416,7 @@ lists:</FONT><BR></P></DIV>
 
 <font color=#0000ff>void</font> print(<font color=#0000ff>int</font> a[], string name, <font color=#0000ff>int</font> size) {
   <font color=#0000ff>for</font>(<font color=#0000ff>int</font> i = 0; i &lt; size; i++)
-    cout &lt;&lt; name &lt;&lt; <font color=#004488>"["</font> &lt;&lt; i &lt;&lt; <font color=#004488>"] = "</font> 
+    cout &lt;&lt; name &lt;&lt; <font color=#004488>"["</font> &lt;&lt; i &lt;&lt; <font color=#004488>"] = "</font>
          &lt;&lt; a[i] &lt;&lt; endl;
 }
 
@@ -3470,7 +3478,7 @@ command-line arguments by stepping through the array:</FONT><BR></P></DIV>
 <font color=#0000ff>int</font> main(<font color=#0000ff>int</font> argc, <font color=#0000ff>char</font>* argv[]) {
   cout &lt;&lt; <font color=#004488>"argc = "</font> &lt;&lt; argc &lt;&lt; endl;
   <font color=#0000ff>for</font>(<font color=#0000ff>int</font> i = 0; i &lt; argc; i++)
-    cout &lt;&lt; <font color=#004488>"argv["</font> &lt;&lt; i &lt;&lt; <font color=#004488>"] = "</font> 
+    cout &lt;&lt; <font color=#004488>"argv["</font> &lt;&lt; i &lt;&lt; <font color=#004488>"] = "</font>
          &lt;&lt; argv[i] &lt;&lt; endl;
 } <font color=#009900>///:~</font></PRE></FONT></BLOCKQUOTE>
 
@@ -3553,7 +3561,7 @@ your compiler may not follow that):</FONT><BR></P></DIV>
     exit(1);
   }
   <font color=#0000ff>double</font> d = atof(argv[1]);
-  <font color=#0000ff>unsigned</font> <font color=#0000ff>char</font>* cp = 
+  <font color=#0000ff>unsigned</font> <font color=#0000ff>char</font>* cp =
     <font color=#0000ff>reinterpret_cast</font>&lt;<font color=#0000ff>unsigned</font> <font color=#0000ff>char</font>*&gt;(&amp;d);
   <font color=#0000ff>for</font>(<font color=#0000ff>int</font> i = <font color=#0000ff>sizeof</font>(<font color=#0000ff>double</font>)-1; i &gt;= 0 ; i -= 2) {
     printBinary(cp[i-1]);
@@ -3654,7 +3662,7 @@ This even works with arrays of <B>struct</B>s:</FONT><BR></P></DIV>
 <font color=#0000ff>int</font> main() {
   Primitives p[10];
   Primitives* pp = p;
-  cout &lt;&lt; <font color=#004488>"sizeof(Primitives) = "</font> 
+  cout &lt;&lt; <font color=#004488>"sizeof(Primitives) = "</font>
        &lt;&lt; <font color=#0000ff>sizeof</font>(Primitives) &lt;&lt; endl;
   cout &lt;&lt; <font color=#004488>"pp = "</font> &lt;&lt; (<font color=#0000ff>long</font>)pp &lt;&lt; endl;
   pp++;
@@ -3813,7 +3821,7 @@ dynamically, create <A NAME="Index918"></A><B>bool</B> flags:</FONT><BR></P></DI
       cout &lt;&lt; <font color=#004488>"Debugger is now on!"</font> &lt;&lt; endl;
     } <font color=#0000ff>else</font> {
       cout &lt;&lt; <font color=#004488>"Debugger is now off."</font> &lt;&lt; endl;
-    }  
+    }
     cout &lt;&lt; <font color=#004488>"Turn debugger [on/off/quit]: "</font>;
     string reply;
     cin &gt;&gt; reply;
@@ -4090,9 +4098,9 @@ DF(a); DF(b); DF(c); DF(d); DF(e); DF(f); DF(g);
       <font color=#004488>"or q to quit"</font> &lt;&lt; endl;
     <font color=#0000ff>char</font> c, cr;
     cin.get(c); cin.get(cr); <font color=#009900>// second one for CR</font>
-    <font color=#0000ff>if</font> ( c == 'q' ) 
+    <font color=#0000ff>if</font> ( c == 'q' )
       <font color=#0000ff>break</font>; <font color=#009900>// ... out of while(1)</font>
-    <font color=#0000ff>if</font> ( c &lt; 'a' || c &gt; 'g' ) 
+    <font color=#0000ff>if</font> ( c &lt; 'a' || c &gt; 'g' )
       <font color=#0000ff>continue</font>;
     (*func_table[c - 'a'])();
   }
@@ -4350,25 +4358,25 @@ all: \
   Guess2
 # Rest of the files <font color=#0000ff>for</font> <font color=#0000ff>this</font> chapter not shown
 
-Return: Return.o 
-  $(CPP) $(OFLAG)Return Return.o 
+Return: Return.o
+  $(CPP) $(OFLAG)Return Return.o
 
-Declare: Declare.o 
-  $(CPP) $(OFLAG)Declare Declare.o 
+Declare: Declare.o
+  $(CPP) $(OFLAG)Declare Declare.o
 
-Ifthen: Ifthen.o 
-  $(CPP) $(OFLAG)Ifthen Ifthen.o 
+Ifthen: Ifthen.o
+  $(CPP) $(OFLAG)Ifthen Ifthen.o
 
-Guess: Guess.o 
-  $(CPP) $(OFLAG)Guess Guess.o 
+Guess: Guess.o
+  $(CPP) $(OFLAG)Guess Guess.o
 
-Guess2: Guess2.o 
-  $(CPP) $(OFLAG)Guess2 Guess2.o 
+Guess2: Guess2.o
+  $(CPP) $(OFLAG)Guess2 Guess2.o
 
-Return.o: Return.cpp 
-Declare.o: Declare.cpp 
-Ifthen.o: Ifthen.cpp 
-Guess.o: Guess.cpp 
+Return.o: Return.cpp
+Declare.o: Declare.cpp
+Ifthen.o: Ifthen.cpp
+Guess.o: Guess.cpp
 Guess2.o: Guess2.cpp</PRE></FONT></BLOCKQUOTE>
 
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">The macro CPP is set to the name of the
@@ -4629,10 +4637,10 @@ by value&#8221; vs. &#8220;passing addresses.&#8221;</FONT><BR></P></DIV>
 
 <DIV ALIGN="CENTER">
     <FONT FACE="Verdana" size = "-1">
-     [ <a href="Chapter02.html">Previous Chapter</a> ] 
-    [ <a href="Contents.html">Table of Contents</a> ] 
+     [ <a href="Chapter02.html">Previous Chapter</a> ]
+    [ <a href="Contents.html">Table of Contents</a> ]
     [ <a href="DocIndex.html">Index</a> ]
-     [ <a href="Chapter04.html">Next Chapter</a> ] 
+     [ <a href="Chapter04.html">Next Chapter</a> ]
     </FONT>
     <BR>
  Last Update:09/27/2001</P></DIV>
