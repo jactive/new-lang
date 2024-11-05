@@ -1,0 +1,1 @@
+You might think that this could as easily be accomplished using preprocessor substitution, but there are key situations in which the compiler must be aware that you’re treating a name as if it were a type, so typedef is essential.

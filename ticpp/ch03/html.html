@@ -2759,8 +2759,8 @@ sizeof &#8211; an operator by itself
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">The <A NAME="Index830"></A><B>sizeof</B>
 operator stands alone because it satisfies an unusual need. <B>sizeof</B> gives
 you information about the amount of memory allocated for data items. As
-described earlier in this chapter, <B>sizeof</B> tells you the number of bytes
-used by any particular variable. It can also give the size of a data type (with
+described earlier in this chapter, <B>sizeof</B> tells you <hw>the number of bytes
+used by any particular variable</hw>. It can also give <hw>the size of a data type</hw> (with
 no variable name):</FONT><BR></P></DIV>
 
 <BLOCKQUOTE><FONT SIZE = "+1"><PRE><font color=#009900>//: C03:sizeof.cpp</font>
@@ -2771,10 +2771,10 @@ no variable name):</FONT><BR></P></DIV>
   cout &lt;&lt; <font color=#004488>", sizeof(char) = "</font> &lt;&lt; <font color=#0000ff>sizeof</font>(<font color=#0000ff>char</font>);
 } <font color=#009900>///:~</font></PRE></FONT></BLOCKQUOTE>
 
-<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">By definition, the
+<DIV ALIGN="LEFT"><P><FONT FACE="Georgia">By definition, <hw>the
 <A NAME="Index831"></A><A NAME="Index832"></A><B>sizeof</B> any type of
 <B>char</B> (<B>signed</B>, <B>unsigned</B> or plain) is always one, regardless
-of whether the underlying storage for a <B>char</B> is actually one byte. For
+of whether the underlying storage for a <B>char</B> is actually one byte</hw>. For
 all other types, the result is the size in bytes.</FONT><BR></P></DIV>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">Note that <B>sizeof</B> is an operator,
 not a function. If you apply it to a type, it must be used with the
@@ -2950,7 +2950,7 @@ commonly-used <B>typedef</B>:</FONT><BR></P></DIV>
 knows that you mean <B>unsigned long</B>. You might think that this could as
 easily be accomplished using preprocessor substitution, but there are key
 situations in which the compiler must be aware that you&#8217;re treating a name
-as if it were a type, so <B>typedef</B> is essential.</FONT><BR></P></DIV>
+as if it were a type, so <B>typedef</B> is essential.</FONT><hw>(type safety and semantic richness)</hw><BR></P></DIV>
 <DIV ALIGN="LEFT"><P><FONT FACE="Georgia">One place where <B>typedef</B> comes in
 handy is for pointer types. As previously mentioned, if you
 say:</FONT><BR></P></DIV>
