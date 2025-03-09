@@ -43,8 +43,10 @@ class CountingTriangles {
     }
 
     int countDistinctTriangles(ArrayList<Sides> arr) {
-        Set<Sides> uniqueSides = new HashSet<>();
-        arr.stream().forEach(uniqueSides::add);
+        Set<Sides> uniqueSides = new HashSet<>(arr);
+        // GoOver not use the following two
+        // uniqueSides.addAll(arr);
+        // arr.stream().forEach(uniqueSides::add);
         return uniqueSides.size();
     }
 
@@ -111,6 +113,7 @@ class CountingTriangles {
         }
 
         public int hashCode() {
+            // GoOver Objects.hash
             return 7 * min + 49 * mid + 384 * max;
         }
 
